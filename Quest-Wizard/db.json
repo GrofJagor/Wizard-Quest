@@ -1,0 +1,49 @@
+{ "quest":[
+  {
+    "id": 1,
+    "title": "The Lost Amulet",
+    "level": "EASY",
+    "patron": "user_101",
+    "description": "Find the ancient amulet that was lost somewhere in the Whispering Forest.",
+    "wizards": ["user_201", "user_202"],
+    "status": "OPEN"
+  },
+  {
+    "id": 2,
+    "title": "Dragon of Black Mountain",
+    "level": "HARD",
+    "patron": "user_102",
+    "description": "A dangerous dragon has awakened beneath Black Mountain. Defeat it before it reaches the nearby villages.",
+    "wizards": ["user_203", "user_204", "user_205"],
+    "status": "IN_PROGRESS"
+  },
+  {
+    "id": 3,
+    "title": "Potion Delivery",
+    "level": "MEDIUM",
+    "patron": "user_103",
+    "description": "Deliver a collection of magical potions to the wizard living beyond the Silver River.",
+    "wizards": ["user_206"],
+    "status": "COMPLETED"
+  },
+  {
+    "id": 4,
+    "title": "The Haunted Tower",
+    "level": "EXPERT",
+    "patron": "user_104",
+    "description": "Investigate the abandoned tower and discover what is causing the strange magical disturbances.",
+    "wizards": ["user_207", "user_208", "user_209"],
+    "status": "OPEN"
+  },
+  {
+    "id": 5,
+    "title": "Gather Moonflowers",
+    "level": "EASY",
+    "patron": "user_105",
+    "description": "Collect ten moonflowers before sunrise for a powerful healing spell.",
+    "wizards": [],
+    "status": "OPEN"
+  }
+]
+
+}

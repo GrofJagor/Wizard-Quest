@@ -1,0 +1,55 @@
+<!-- <app-quest-details></app-quest-details>
+<p>quest-board works!</p>
+<div class="table-container">
+  <table class="rpg-table">
+    <thead>
+      <tr>
+        <th>Kvest</th>
+        <th>Težina</th>
+        <th>Nagrada</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Zmajevo gnezdo</td>
+        <td><span class="danger">Legendarno</span></td>
+        <td>500 🪙</td>
+      </tr>
+      <tr>
+        <td>Izgubljeni artefakt</td>
+        <td><span class="rare">Retko</span></td>
+        <td>150 🪙</td>
+      </tr>
+      <tr>
+        <td>Čišćenje podruma</td>
+        <td>Obično</td>
+        <td>10 🪙</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+
+
+<ul *ngFor="let quest of quests | async">
+   <!-- <app-quest-details></app-quest-details>  -->
+   {{quest.title}}
+</ul>
+
+<!-- <div *ngIf="loading$ | async" class="loading">
+  Loading quests...
+</div>
+
+<div *ngIf="error$ | async as error" class="error">
+  {{ error }}
+</div>
+
+<ul *ngIf="!(loading$ | async) && !(error$ | async)">
+  <li *ngFor="let quest of quests$ | async;">
+    {{ quest.title }}
+
+  </li>
+</ul>
+
+<div *ngIf="(quests$ | async)?.length === 0 && !(loading$ | async)">
+  No quests found.
+</div> -->

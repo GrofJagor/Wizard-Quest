@@ -1,0 +1,70 @@
+/* Kontejner koji dodaje magični sjaj oko cele tabele */
+.table-container {
+  background: #12141c;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(114, 76, 219, 0.15), /* Blagi ljubičasti magični sjaj */
+              0 0 40px rgba(0, 0, 0, 0.7);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Glavna tabela sa srednjovekovnim i mističnim stilom */
+.rpg-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: 'Cinzel', 'Georgia', serif; /* Serifni fontovi daju starinski izgled */
+  color: #e2d9c4; /* Boja starog papira/pergamenta za tekst */
+  background-color: #1a1d28;
+  border: 2px solid #8c734b; /* Boja starog zlata/bronze za ivice */
+  border-radius: 6px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Zaglavlje tabele (Gornji red) */
+.rpg-table th {
+  background: linear-gradient(180deg, #2d261d 0%, #1a1610 100%); /* Tamno drvo / bronza efekat */
+  color: #d4af37; /* Zlatna boja za naslove */
+  padding: 14px 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #8c734b;
+  text-align: left;
+}
+
+/* Ćelije unutar tabele */
+.rpg-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(140, 115, 75, 0.2); /* Suptilne zlatno-smeđe unutrašnje linije */
+  background-color: rgba(25, 29, 41, 0.6);
+  transition: all 0.3s ease;
+}
+
+/* Efekat prelaza mišem (Hover) - Magični prosvetljujući efekat */
+.rpg-table tbody tr:hover td {
+  background-color: rgba(114, 76, 219, 0.15); /* Svetlucavo ljubičasta mistična boja */
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: inset 0 0 10px rgba(114, 76, 219, 0.3);
+}
+
+/* Zaobljavanje ivica na uglovima tabele */
+.rpg-table tr:first-child th:first-child { border-top-left-radius: 4px; }
+.rpg-table tr:first-child th:last-child { border-top-right-radius: 4px; }
+.rpg-table tr:last-child td:first-child { border-bottom-left-radius: 4px; border-bottom: none; }
+.rpg-table tr:last-child td:last-child { border-bottom-right-radius: 4px; border-bottom: none; }
+
+/* Klase za nivoe težine (Opciono, za dodatni vizuelni šmek) */
+.rare {
+  color: #00bfff;
+  text-shadow: 0 0 8px rgba(0, 191, 255, 0.6);
+  font-weight: bold;
+}
+
+.danger {
+  color: #ff4500;
+  text-shadow: 0 0 8px rgba(255, 69, 0, 0.6);
+  font-weight: bold;
+}
