@@ -12,18 +12,26 @@ import { EffectsModule } from '@ngrx/effects';
 import { QuestsEffect } from './store/quest.effects';
 import { environment } from '../environments/environment';
 import { questsReducer } from './store/quest.reducer';
-
+import { NavigationBar } from './components/navigation-bar/navigation-bar';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { QuestCreation } from './components/quest-creation/quest-creation';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WizardList } from './components/wizard-list/wizard-list';
 
 @NgModule({
-  declarations: [App, QuestBoard, QuestDetails],
+  declarations: [App, QuestBoard, QuestDetails, NavigationBar, QuestCreation,WizardList],
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
-    StoreModule.forFeature("quests", questsReducer),
-    StoreModule.forRoot( { quests: questsReducer}),
+    StoreModule.forFeature('quests', questsReducer),
+    StoreModule.forRoot({ quests: questsReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false }),
-    EffectsModule.forRoot([QuestsEffect])],
+    EffectsModule.forRoot([QuestsEffect]),
+  ],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],
 })

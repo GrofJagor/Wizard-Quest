@@ -56,15 +56,31 @@
 .rpg-table tr:last-child td:first-child { border-bottom-left-radius: 4px; border-bottom: none; }
 .rpg-table tr:last-child td:last-child { border-bottom-right-radius: 4px; border-bottom: none; }
 
-/* Klase za nivoe težine (Opciono, za dodatni vizuelni šmek) */
-.rare {
-  color: #00bfff;
-  text-shadow: 0 0 8px rgba(0, 191, 255, 0.6);
+/* Easy - Zeleni magični sjaj */
+.easy{
+  color: #2ecc71;
+  text-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
   font-weight: bold;
 }
 
-.danger {
-  color: #ff4500;
-  text-shadow: 0 0 8px rgba(255, 69, 0, 0.6);
+/* Medium - Žuti/Zlatni sjaj */
+.medium {
+  color: #f1c40f;
+  text-shadow: 0 0 8px rgba(241, 196, 15, 0.6);
   font-weight: bold;
+}
+
+/* Hard - Bronzano/Smeđi mistični sjaj */
+.hard {
+  color: #d3a27f; /* Svetlija bronzana da se lepo vidi na tamnoj pozadini */
+  text-shadow: 0 0 8px rgba(211, 162, 127, 0.6);
+  font-weight: bold;
+}
+
+/* Deadly - Krvavo crveni opasni sjaj */
+.deadly {
+  color: #e74c3c;
+  text-shadow: 0 0 10px rgba(231, 76, 60, 0.8);
+  font-weight: bold;
+  animation: pulse-glow 2s infinite ease-in-out; /* Opciono: pulsirajući efekat za najtežu kategoriju */
 }

@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from './store/app-state';
 import * as QuestActions from './store/quest.actions';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
@@ -13,7 +14,6 @@ import * as QuestActions from './store/quest.actions';
 })
 export class App implements OnInit {
   protected readonly title = signal('Quest-Wizard');
-
 
  constructor(private store: Store<AppState>){};
   ngOnInit() {

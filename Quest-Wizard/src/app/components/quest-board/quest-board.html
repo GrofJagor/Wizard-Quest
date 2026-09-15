@@ -29,11 +29,72 @@
   </table>
 </div> -->
 
-
+<!-- 
 <ul *ngFor="let quest of quests | async">
-   <!-- <app-quest-details></app-quest-details>  -->
+  <app-quest-details></app-quest-details> 
    {{quest.title}}
-</ul>
+</ul> -->
+
+
+<div class="table-container">
+  <table class="rpg-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Quest Title</th>
+        <th>Difficulty</th>
+        <th>Patron</th>
+        <th>Description</th>
+        <th>Assigned Wizards</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Angular prolazi kroz kvestove i pravi po jedan red (tr) za svaki kvest -->
+      <tr *ngFor="let quest of quests | async">
+        <td>{{ quest.id }}</td>
+        
+        <!-- Naslov kvesta -->
+        <td style="font-weight: bold; color: #ffd700;">{{ quest.title }}</td>
+        
+        <!-- Težina kvesta sa tvojim specijalnim CSS klasama -->
+        <td>
+          <span [ngClass]="{
+            'easy': quest.level === 'EASY',
+            'medium': quest.level === 'MEDIUM',
+            'hard': quest.level === 'HARD',
+            'deadly': quest.level === 'DEADLY'
+          }">
+            {{ quest.level }}
+          </span>
+        </td>
+        
+        <!-- Patron -->
+        <td>{{ quest.patron }}</td>
+        
+        <!-- Opis -->
+        <td style="font-style: italic; font-size: 0.9rem; max-width: 300px;">
+          {{ quest.description }}
+        </td>
+        
+        <!-- Lista čarobnjaka složena u jedan red razdvojen zarezima -->
+        <td>
+          <span *ngFor="let wizard of quest.wizards; let last = last">
+            {{ wizard }}{{ !last ? ', ' : '' }}
+          </span>
+        </td>
+        
+        <!-- Status -->
+        <td>
+          <span style="letter-spacing: 1px; font-weight: bold;">
+            {{ quest.status }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 
 <!-- <div *ngIf="loading$ | async" class="loading">
   Loading quests...

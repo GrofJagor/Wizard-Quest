@@ -1,0 +1,119 @@
+:host {
+  --ink: #2b2118;
+  --parchment: #e8dcb8;
+  --parchment-dark: #d8c99a;
+  --forest: #2f4030;
+  --gold: #a9822f;
+  display: block;
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  color: var(--ink);
+}
+
+.picker {
+  border: 1px solid var(--parchment-dark);
+  border-radius: 4px;
+  background: var(--parchment);
+  overflow: hidden;
+}
+
+.picker__search {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--parchment-dark);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.picker__search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  outline: none;
+}
+
+.picker__search input::placeholder {
+  color: rgba(43, 33, 24, 0.5);
+}
+
+.picker__count {
+  font-size: 0.8rem;
+  color: var(--forest);
+  white-space: nowrap;
+}
+
+.picker__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.wizard-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(43, 33, 24, 0.08);
+  transition: background-color 0.12s ease;
+}
+
+.wizard-row:last-child {
+  border-bottom: none;
+}
+
+.wizard-row:hover {
+  background: rgba(169, 130, 47, 0.14);
+}
+
+.wizard-row--chosen {
+  background: rgba(47, 64, 48, 0.12);
+}
+
+.wizard-row input[type='checkbox'] {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--forest);
+  cursor: pointer;
+}
+
+.wizard-row__badge {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--forest);
+  color: var(--parchment);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.wizard-row__info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.wizard-row__name {
+  font-size: 0.95rem;
+}
+
+.wizard-row__specialty {
+  font-size: 0.78rem;
+  color: rgba(43, 33, 24, 0.65);
+}
+
+.picker__empty {
+  margin: 0;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: rgba(43, 33, 24, 0.6);
+}

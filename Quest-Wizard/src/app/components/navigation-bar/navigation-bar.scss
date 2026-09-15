@@ -1,0 +1,180 @@
+/* Uvoz elegantnog srednjovekovnog fonta sa Google Fonts */
+@import url('https://googleapis.com');
+
+/* Osnovni stil navigacije - Magična tamna noć */
+.navbar {
+  background: linear-gradient(135deg, #120d1a 0%, #1a1126 100%); /* Duboka magična ljubičasto-crna */
+  border-bottom: 3px double #d4af37; /* Zlatna dupla ivica u retro stilu */
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15); /* Blagi zlatni sjaj */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  font-family: 'Cinzel', serif; /* Srednjovekovni i elegantni font */
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between; /* Razdvaja logo levo i linkove desno */
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 12px 30px;
+}
+
+/* Logo - Kraljevski pečat */
+.navbar-logo {
+  font-family: 'MedievalSharp', cursive; /* Oštriji, starinski font */
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: #f4eccd; /* Boja starog pergamenta */
+  text-decoration: none;
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+  transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.05);
+}
+
+.navbar-logo span {
+  color: #d4af37; /* Pravo zlato */
+}
+
+/* Navigacioni meni pomeren skroz DESNO */
+.nav-menu {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  margin-left: auto; /* Ključno: gura ceo meni na desnu ivicu */
+}
+
+.nav-item {
+  margin-left: 25px; /* Razmak između magičnih napitaka/linkova */
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #bfa88f; /* Izbledelo zlato / pergament */
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  padding: 8px 16px;
+  position: relative;
+}
+
+/* Efekat prelaza - Magični sjaj i podvlačenje */
+.nav-menu a:hover, 
+.nav-menu a.active {
+  color: #ffffff;
+  text-shadow: 0 0 10px #d4af37, 0 0 20px #ffdf7a; /* Svetlucavi efekat */
+}
+
+/* Podvlačenje koje se širi (Magična linija) */
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+  transition: all 0.3s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Dugme za prijavu - Viteški štit / Napitak */
+.nav-menu .nav-btn {
+  background: linear-gradient(135deg, #8a1818 0%, #4a0d0d 100%); /* Rubinski crvena */
+  color: #f4eccd;
+  border: 1px solid #d4af37;
+  border-radius: 3px; /* Oštrije ivice umesto modernih oblih */
+  box-shadow: 0 0 10px rgba(138, 24, 24, 0.5);
+}
+
+.nav-menu .nav-btn:hover {
+  background: linear-gradient(135deg, #a61f1f 0%, #611111 100%);
+  box-shadow: 0 0 15px #d4af37;
+  color: #fff;
+}
+
+/* Mobilni meni - Prilagođavanje za krčme i mobilne uređaje */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.menu-toggle .bar {
+  height: 2px;
+  width: 100%;
+  background-color: #d4af37; /* Zlatne linije menija */
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+  transition: all 0.3s ease;
+}
+
+/* Mobilni ekran (768px i manje) */
+@media screen and (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: 61px;
+    right: -100%; /* Inicijalno sakriven desno */
+    left: auto; /* Resetuje prethodni stil */
+    flex-direction: column;
+    background: #161021;
+    border-left: 2px solid #d4af37;
+    border-bottom: 2px solid #d4af37;
+    width: 250px; /* Širina magične fioke */
+    height: calc(100vh - 61px); /* Puna visina ekrana */
+    transition: right 0.4s ease; /* Glatko klizanje sa desne strane */
+    padding: 40px 0;
+    box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-menu.active {
+    right: 0; /* Klizi unutra na desnu ivicu */
+  }
+
+  .nav-item {
+    margin: 20px 0;
+    width: 100%;
+  }
+
+  .nav-menu a {
+    display: inline-block;
+    width: auto;
+  }
+
+  /* Animacija krstića (X) od zlatnih mačeva */
+  .bar.open:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+
+  .bar.open:nth-child(2) {
+    opacity: 0;
+  }
+
+  .bar.open:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+}

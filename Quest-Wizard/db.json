@@ -29,7 +29,7 @@
   {
     "id": 4,
     "title": "The Haunted Tower",
-    "level": "EXPERT",
+    "level": "DEADLY",
     "patron": "user_104",
     "description": "Investigate the abandoned tower and discover what is causing the strange magical disturbances.",
     "wizards": ["user_207", "user_208", "user_209"],

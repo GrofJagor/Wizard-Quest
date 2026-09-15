@@ -1,0 +1,36 @@
+<div class="picker">
+  <div class="picker__search">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search by name or specialty"
+      aria-label="Search wizards"
+    />
+    <span class="picker__count">{{ selected.length }} chosen</span>
+  </div>
+
+  <ul class="picker__list" *ngIf="filteredWizards.length; else empty">
+    <li
+      *ngFor="let wizard of filteredWizards; trackBy: trackByWizardId"
+      class="wizard-row"
+      [class.wizard-row--chosen]="isSelected(wizard.id)"
+      (click)="toggle(wizard.id)"
+    >
+      <input
+        type="checkbox"
+        [checked]="isSelected(wizard.id)"
+        (click)="$event.stopPropagation(); toggle(wizard.id)"
+        [attr.aria-label]="'Invite ' + wizard.name"
+      />
+      <span class="wizard-row__badge">{{ wizard.name.charAt(0) }}</span>
+      <span class="wizard-row__info">
+        <span class="wizard-row__name">{{ wizard.name }}</span>
+        <span class="wizard-row__specialty">{{ wizard.affinity }}</span>
+      </span>
+    </li>
+  </ul>
+
+  <ng-template #empty>
+    <p class="picker__empty">No wizards match "{{ searchTerm }}".</p>
+  </ng-template>
+</div>
