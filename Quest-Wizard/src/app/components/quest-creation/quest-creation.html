@@ -69,7 +69,7 @@
   <div class="field" *ngIf="!openToAll">
     <label>Invite wizards</label>
     <app-wizard-list
-      [wizards]="wizards"
+      [wizards]="(wizards | async) ?? []"
       [selected]="selectedWizardIds"
       (selectedChange)="onWizardSelectionChange($event)"
     ></app-wizard-list>

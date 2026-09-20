@@ -4,19 +4,33 @@ import { Quest } from "../models/quest";
 
 
 
-export const loadQuests=createAction(
-    "Load Quests",
-)
+// export const loadQuests=createAction(
+//     "Load Quests",
+// )
 
-export const loadQuestsSuccess=createAction(
-    "Load Quests Success",
-    props<{
-quests:Quest[];
-    }>()
-)
+// export const loadQuestsSuccess=createAction(
+//     "Load Quests Success",
+//     props<{
+// quests:Quest[];
+//     }>()
+// )
 
+// export const loadQuestsFailure = createAction(
+//   '[Quests] Load Quests Failure',
+//   props<{ error: string }>()
+// );
+
+
+ 
+export const loadQuests = createAction("[Quests] Load Quests");
+ 
+export const loadQuestsSuccess = createAction(
+  "[Quests] Load Quests Success",
+  props<{ quests: Quest[] }>()
+);
+ 
 export const loadQuestsFailure = createAction(
-  '[Quests] Load Quests Failure',
+  "[Quests] Load Quests Failure",
   props<{ error: string }>()
 );
-
+ 

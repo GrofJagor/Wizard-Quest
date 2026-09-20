@@ -8,13 +8,11 @@ import { Wizard } from '../../models/wizard';
   templateUrl: './wizard-list.html',
 })
 export class WizardList {
-  /** Full pool of wizards to choose from. */
   @Input() wizards: Wizard[] = [];
  
-  /** Ids currently selected, set by the parent (e.g. when editing a quest). */
+
   @Input() selected: string[] = [];
  
-  /** Emits the full updated selection whenever it changes. */
   @Output() selectedChange = new EventEmitter<string[]>();
  
   searchTerm = '';
@@ -45,4 +43,5 @@ export class WizardList {
   trackByWizardId(_index: number, wizard: Wizard): string{
     return wizard.id;
   }
+
 }

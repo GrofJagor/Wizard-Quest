@@ -1,6 +1,11 @@
 <app-navigation-bar></app-navigation-bar>
 <app-quest-board></app-quest-board>
 <app-quest-creation></app-quest-creation>
+<app-wizard-profile 
+  *ngFor="let wizard of wizards | async"
+  [wizard]="wizard">
+</app-wizard-profile>
+<app-wizard-list [wizards]="[...(wizards | async) ?? []]"></app-wizard-list>
 <router-outlet />
 
 

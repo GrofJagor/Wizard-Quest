@@ -1,48 +1,83 @@
 { "quest":[
   {
-    "id": 1,
-    "title": "The Lost Amulet",
+    "id": 101,
+    "title": "The Spark of Awakening",
     "level": "EASY",
-    "patron": "user_101",
-    "description": "Find the ancient amulet that was lost somewhere in the Whispering Forest.",
-    "wizards": ["user_201", "user_202"],
-    "status": "OPEN"
+    "patron": "user_archmage_99",
+    "description": "Retrieve the charged crystal from the Thunder Peaks.",
+    "reward": 150,
+    "completedByWizardIds": ["wiz-001"],
+    "activeWizardIds": [],
+    "status": "COMPLETED",
+    "open": false
   },
   {
-    "id": 2,
-    "title": "Dragon of Black Mountain",
-    "level": "HARD",
-    "patron": "user_102",
-    "description": "A dangerous dragon has awakened beneath Black Mountain. Defeat it before it reaches the nearby villages.",
-    "wizards": ["user_203", "user_204", "user_205"],
-    "status": "IN_PROGRESS"
-  },
-  {
-    "id": 3,
-    "title": "Potion Delivery",
+    "id": 102,
+    "title": "Calming the Tempest",
     "level": "MEDIUM",
-    "patron": "user_103",
-    "description": "Deliver a collection of magical potions to the wizard living beyond the Silver River.",
-    "wizards": ["user_206"],
-    "status": "COMPLETED"
+    "patron": "user_king_arthur",
+    "description": "Help the village of Oakhaven stop an unnatural storm.",
+    "reward": 500,
+    "completedByWizardIds": ["wiz-001"],
+    "activeWizardIds": ["wiz-003"],
+    "status": "IN PROGRESS",
+    "open": false
   },
   {
-    "id": 4,
-    "title": "The Haunted Tower",
+    "id": 201,
+    "title": "Charging the Monolith",
+    "level": "HARD",
+    "patron": "user_council_elder",
+    "description": "Channel 10,000 volts of pure energy into the ancient spire.",
+    "reward": 1200,
+    "completedByWizardIds": [],
+    "activeWizardIds": ["wiz-001"],
+    "status": "IN PROGRESS",
+    "open": false
+  },
+  {
+    "id": 301,
+    "title": "Slaying the Ash Drake",
     "level": "DEADLY",
-    "patron": "user_104",
-    "description": "Investigate the abandoned tower and discover what is causing the strange magical disturbances.",
-    "wizards": ["user_207", "user_208", "user_209"],
-    "status": "OPEN"
+    "patron": "user_baron_von_fire",
+    "description": "Defeat the ancient red drake resting inside Mount Vulgis.",
+    "reward": 5000,
+    "completedByWizardIds": [],
+    "activeWizardIds": [],
+    "status": "OPEN",
+    "open": true
+  }
+],
+"wizard":[
+  {
+    "id": "wiz-001",
+    "name": "Eldrin Stormweaver",
+    "level": 14,
+    "affinity": "Lightning",
+    "xp": 72,
+    "completedQuestIds":101,
+    "activeQuestId": 201,
+    "pictureUrl": "https://example.com"
   },
   {
-    "id": 5,
-    "title": "Gather Moonflowers",
-    "level": "EASY",
-    "patron": "user_105",
-    "description": "Collect ten moonflowers before sunrise for a powerful healing spell.",
-    "wizards": [],
-    "status": "OPEN"
+    "id": "wiz-002",
+    "name": "Morgath the Shadowweaver",
+    "level": 28,
+    "affinity": "Necromancy",
+    "xp": 45,
+    "completedQuestIds": [],
+    "activeQuestId": null,
+    "pictureUrl": "https://example.com"
+  },
+  {
+    "id": "wiz-003",
+    "name": "Lyra Frostwhisper",
+    "level": 5,
+    "affinity": "Ice",
+    "xp": 18,
+    "completedQuestIds": [],
+    "activeQuestId": 102,
+    "pictureUrl": "https://example.com"
   }
 ]
 

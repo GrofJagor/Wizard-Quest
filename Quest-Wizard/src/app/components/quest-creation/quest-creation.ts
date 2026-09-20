@@ -3,60 +3,79 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Quest, QuestLevel } from '../../models/quest';
 import { Wizard } from '../../models/wizard';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AppState } from '../../store/app-state';
+import { Store } from '@ngrx/store';
+import { selectAllWizards } from '../../store/wizard.selectors';
 
 
 
-export const MOCK_WIZARDS: Wizard[] = [
-  {
-    id: "1",
-    name: 'Merlin Sylver',
-    level: 85,
-    affinity: 'Arcane',
-    xp: 245000
-  },
-  {
-    id: "2",
-    name: 'Ignis Ashworth',
-    level: 42,
-    affinity: 'Fire',
-    xp: 68400
-  },
-  {
-    id: "3",
-    name: 'Gala Stormweaver',
-    level: 67,
-    affinity: 'Lightning',
-    xp: 152300
-  },
-  {
-    id: "4",
-    name: 'Lyra Deepwater',
-    level: 29,
-    affinity: 'Water',
-    xp: 31200
-  },
-  {
-    id: "5",
-    name: 'Terran Ironroot',
-    level: 55,
-    affinity: 'Earth',
-    xp: 98900
-  },
-  {
-    id: "6",
-    name: 'Zephyr Windrider',
-    level: 12,
-    affinity: 'Air',
-    xp: 8500
-  },
-  {
-    id: "7",
-    name: 'Morgana Shadowend',
-    level: 99,
-    affinity: 'Necromancy',
-    xp: 489000
-  }
-];
+// export const MOCK_WIZARDS: Wizard[] = [
+//   {
+//     id: "wiz-001",
+//     name: "Eldrin Stormweaver",
+//     level: 14,
+//     affinity: "Lightning",
+//     xp: 72,
+//     completedQuests: [
+//       {
+//         id: 101,
+//         title: "The Spark of Awakening",
+//         level: "EASY",
+//         patron: "user_archmage_99",
+//         description: "Retrieve the charged crystal from the Thunder Peaks.",
+//         reward: 150,
+//         wizards: ["wiz-001"],
+//         status: "COMPLETED",
+//         open: false
+//       },
+//       {
+//         id: 102,
+//         title: "Calming the Tempest",
+//         level: "MEDIUM",
+//         patron: "user_king_arthur",
+//         description: "Help the village of Oakhaven stop an unnatural storm.",
+//         reward: 500,
+//         wizards: ["wiz-001", "wiz-003"],
+//         status: "COMPLETED",
+//         open: false
+//       }
+//     ],
+//     activeQuest: {
+//       id: 201,
+//       title: "Charging the Monolith",
+//       level: "HARD",
+//       patron: "user_council_elder",
+//       description: "Channel 10,000 volts of pure energy into the ancient spire.",
+//       reward: 1200,
+//       wizards: ["wiz-001"],
+//       status: "IN_PROGRESS",
+//       open: false
+//     },
+//     pictureUrl: "https://example.com"
+//   },
+//   {
+//     id: "wiz-002",
+//     name: "Morgath the Shadowweaver",
+//     level: 28,
+//     affinity: "Necromancy",
+//     xp: 45,
+//     completedQuests: [
+//       {
+//         id: 88,
+//         title: "Graveyard Shift",
+//         level: "MEDIUM",
+//         patron: "user_necromancer_lord",
+//         description: "Animate 50 skeletons for the castle defense.",
+//         reward: 350,
+//         wizards: ["wiz-002"],
+//         status: "COMPLETED",
+//         open: false
+//       }
+//     ],
+//     activeQuest: null,
+//     pictureUrl: "https://example.com"
+//   }
+// ];
 
 const LEVELS: QuestLevel[] = ['EASY', 'MEDIUM', 'HARD','DEADLY'];
 
@@ -66,19 +85,18 @@ const LEVELS: QuestLevel[] = ['EASY', 'MEDIUM', 'HARD','DEADLY'];
   styleUrl: './quest-creation.scss',
   templateUrl: './quest-creation.html',
 })
+
 export class QuestCreation 
  {
-   /** Emits a fully-built quest whenever the form is submitted successfully. */
+    private store = inject(Store<AppState>);
     private fb = inject(FormBuilder);
   @Output() questCreated = new EventEmitter<Quest>();
 
   readonly levels = LEVELS;
-  readonly wizards = MOCK_WIZARDS;
+  readonly wizards = this.store.select(selectAllWizards);;
  
-  /** Chosen wizard ids, kept outside the form group and synced from the picker. */
+
   selectedWizardIds: string[] = [];
- 
-  /** True once the user has tried to submit, so picker errors only show then. */
   submitAttempted = false;
   
   form = this.fb.group({
@@ -130,8 +148,9 @@ export class QuestCreation
       description: description!.trim(),
       reward: reward!,
       open: openToAll!,
-      wizards: openToAll ? [] : [...this.selectedWizardIds],
-      
+     // wizards: openToAll ? [] : [...this.selectedWizardIds],
+      completedByWizardIds:[],
+      activeWizardIds:[]
     };
  
     this.questCreated.emit(quest);

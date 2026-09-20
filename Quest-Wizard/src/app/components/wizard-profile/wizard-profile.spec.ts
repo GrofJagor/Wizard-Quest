@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { QuestCreation } from './quest-creation';
+import { WizardProfile } from './wizard-profile';
 
-describe('QuestCreation', () => {
-  let component: QuestCreation;
-  let fixture: ComponentFixture<QuestCreation>;
+describe('WizardProfile', () => {
+  let component: WizardProfile;
+  let fixture: ComponentFixture<WizardProfile>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [QuestCreation],
+      declarations: [WizardProfile],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(QuestCreation);
+    fixture = TestBed.createComponent(WizardProfile);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
@@ -19,4 +19,3 @@ describe('QuestCreation', () => {
     expect(component).toBeTruthy();
   });
 });
-
