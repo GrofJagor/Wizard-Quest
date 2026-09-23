@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 //import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHatWizard } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-navigation-bar',
@@ -9,7 +10,10 @@ import { faHatWizard } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './navigation-bar.html',
 })
 export class NavigationBar {
+  
+  authService = inject(AuthService);
 
+  
    wizardHatIcon = faHatWizard;
 
   isMenuOpen: boolean = false;
@@ -20,5 +24,10 @@ export class NavigationBar {
 
   closeMenu(): void {
     this.isMenuOpen = false;
+  }
+
+ 
+  logout(): void {
+    this.authService.logout();
   }
 }

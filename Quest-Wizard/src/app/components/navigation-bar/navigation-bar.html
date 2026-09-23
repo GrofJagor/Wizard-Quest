@@ -32,4 +32,37 @@
       </li>
     </ul>
   </div>
+  
+
+
+
+  <div class="nav-links">
+    <a routerLink="/quests" routerLinkActive="active">Quests</a>
+    <a routerLink="/wizards" routerLinkActive="active">Wizards</a>
+  </div>
+ 
+  <div class="nav-auth" *ngIf="authService.currentUser$ | async as user; else guestLinks">
+    <div class="user-chip">
+      <img
+        *ngIf="user.pictureUrl"
+        class="user-avatar"
+        [src]="user.pictureUrl"
+        [alt]="user.name || user.email"
+      />
+      <div class="user-avatar user-avatar-fallback" *ngIf="!user.pictureUrl">
+        {{ user.role === "TOWER" ? "T" : "W" }}
+      </div>
+      <span class="user-name">{{ user.name || user.email }}</span>
+    </div>
+    <button class="logout-button" (click)="logout()">Log out</button>
+  </div>
+ 
+  <ng-template #guestLinks>
+    <div class="nav-auth">
+      <a class="auth-link" routerLink="/login" routerLinkActive="active">Login</a>
+      <a class="auth-link register-link" routerLink="/register" routerLinkActive="active">
+        Register
+      </a>
+    </div>
+  </ng-template>
 </nav>

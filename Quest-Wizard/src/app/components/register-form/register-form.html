@@ -1,0 +1,80 @@
+<div class="arcane-auth-page">
+  <form class="grimoire-form" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="frame-corner corner-tl"></div>
+    <div class="frame-corner corner-tr"></div>
+    <div class="frame-corner corner-bl"></div>
+    <div class="frame-corner corner-br"></div>
+
+    <h1 class="form-title">Join the Order</h1>
+    <p class="form-subtitle">Choose your path.</p>
+
+    <div class="role-toggle">
+      <label class="role-option" [class.active]="isWizard">
+        <input type="radio" formControlName="role" value="WIZARD" />
+        <span>Wizard</span>
+      </label>
+      <label class="role-option" [class.active]="!isWizard">
+        <input type="radio" formControlName="role" value="TOWER" />
+        <span>Tower (Admin)</span>
+      </label>
+    </div>
+
+    <label class="field-label" for="email">Email</label>
+    <input
+      id="email"
+      type="email"
+      class="field-input"
+      formControlName="email"
+      autocomplete="email"
+    />
+    <p class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+      A valid sigil (email) is required.
+    </p>
+
+    <label class="field-label" for="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      class="field-input"
+      formControlName="password"
+      autocomplete="new-password"
+    />
+    <p
+      class="field-error"
+      *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
+    >
+      Your incantation (password) must be at least 8 characters.
+    </p>
+
+    <ng-container *ngIf="isWizard">
+      <label class="field-label" for="name">Wizard Name</label>
+      <input id="name" type="text" class="field-input" formControlName="name" />
+      <p class="field-error" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+        Every wizard needs a name.
+      </p>
+
+      <label class="field-label" for="affinity">Affinity</label>
+      <input
+        id="affinity"
+        type="text"
+        class="field-input"
+        formControlName="affinity"
+        placeholder="e.g. Verdant, Pyric, Umbral"
+      />
+      <p
+        class="field-error"
+        *ngIf="form.get('affinity')?.touched && form.get('affinity')?.invalid"
+      >
+        Choose your magical affinity.
+      </p>
+    </ng-container>
+
+    <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <button type="submit" class="arcane-button" [disabled]="loading">
+      {{ loading ? "Binding the sigil..." : "Register" }}
+    </button>
+
+    <p class="form-footer">Already bound to the order? <a routerLink="/login">Log in</a></p>
+  </form>
+</div>

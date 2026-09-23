@@ -20,6 +20,8 @@ import { WizardList } from './components/wizard-list/wizard-list';
 import { WizardProfile } from './components/wizard-profile/wizard-profile';
 import { wizardsReducer } from './store/wizard.reducer';
 import { WizardsEffects } from './store/wizard.effects';
+import { LoginForm } from './components/login-form/login-form';
+import { RegisterForm } from './components/register-form/register-form';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { WizardsEffects } from './store/wizard.effects';
     QuestCreation,
     WizardList,
     WizardProfile,
+    LoginForm,
+    RegisterForm,
   ],
   imports: [
     FontAwesomeModule,
@@ -42,7 +46,7 @@ import { WizardsEffects } from './store/wizard.effects';
     StoreModule.forFeature('wizards', wizardsReducer),
     StoreModule.forRoot({ quests: questsReducer, wizards: wizardsReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false }),
-    EffectsModule.forRoot([QuestsEffects,WizardsEffects]),
+    EffectsModule.forRoot([QuestsEffects, WizardsEffects]),
   ],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],
