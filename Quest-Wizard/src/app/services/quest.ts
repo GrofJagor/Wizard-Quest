@@ -19,7 +19,7 @@ export class QuestsService {
     {
         // console.log(this.httpClient.get<Quest[]>(environment.apiUrl+'/quest').pipe(
         // catchError(ErrorHandler)))
-       return this.httpClient.get<Quest[]>(environment.apiUrl+'/quest').pipe(
+       return this.httpClient.get<Quest[]>(environment.apiUrl+'/quests').pipe(
         catchError(ErrorHandler)
     
        )

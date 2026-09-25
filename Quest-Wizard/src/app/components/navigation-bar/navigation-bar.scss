@@ -1,7 +1,6 @@
-/* Uvoz elegantnog srednjovekovnog fonta sa Google Fonts */
-@import url('https://googleapis.com');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=MedievalSharp&display=swap');
 
-/* Osnovni stil navigacije - Magična tamna noć */
+/* Osnovni stil navigacije - Magična tamna noć */
 .navbar {
   background: linear-gradient(135deg, #120d1a 0%, #1a1126 100%); /* Duboka magična ljubičasto-crna */
   border-bottom: 3px double #d4af37; /* Zlatna dupla ivica u retro stilu */
@@ -69,7 +68,7 @@
 }
 
 /* Efekat prelaza - Magični sjaj i podvlačenje */
-.nav-menu a:hover, 
+.nav-menu a:hover,
 .nav-menu a.active {
   color: #ffffff;
   text-shadow: 0 0 10px #d4af37, 0 0 20px #ffdf7a; /* Svetlucavi efekat */
@@ -93,19 +92,62 @@
   left: 0;
 }
 
-/* Dugme za prijavu - Viteški štit / Napitak */
+/* Dugme za prijavu - Viteški štit / Napitak (radi i za <a> i za <button>, npr. Register i Logout) */
 .nav-menu .nav-btn {
   background: linear-gradient(135deg, #8a1818 0%, #4a0d0d 100%); /* Rubinski crvena */
   color: #f4eccd;
   border: 1px solid #d4af37;
   border-radius: 3px; /* Oštrije ivice umesto modernih oblih */
   box-shadow: 0 0 10px rgba(138, 24, 24, 0.5);
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 .nav-menu .nav-btn:hover {
   background: linear-gradient(135deg, #a61f1f 0%, #611111 100%);
   box-shadow: 0 0 15px #d4af37;
   color: #fff;
+}
+
+/* Signed-in user chip: avatar + name, shown instead of Login/Register */
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 25px;
+}
+
+.nav-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #d4af37;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+.nav-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.15);
+  color: #f4eccd;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nav-username {
+  color: #f4eccd;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Mobilni meni - Prilagođavanje za krčme i mobilne uređaje */
@@ -165,6 +207,12 @@
     width: auto;
   }
 
+  .user-item {
+    margin: 20px 0;
+    width: 100%;
+    justify-content: center;
+  }
+
   /* Animacija krstića (X) od zlatnih mačeva */
   .bar.open:nth-child(1) {
     transform: translateY(9px) rotate(45deg);
@@ -176,5 +224,27 @@
 
   .bar.open:nth-child(3) {
     transform: translateY(-9px) rotate(-45deg);
+  }
+}
+
+.nav-menu a, 
+.nav-menu .nav-btn,
+.nav-item {
+  white-space: nowrap; 
+}
+
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .nav-item {
+    margin-left: 12px; /* Smanjujemo razmak između stavki sa 25px na 12px */
+  }
+  
+  .nav-menu a {
+    padding: 6px 10px; /* Smanjujemo unutrašnji razmak linkova */
+    font-size: 14px;   /* Blago smanjujemo font da dobijemo na prostoru */
+  }
+  
+  .navbar-container {
+    padding: 12px 15px; /* Smanjujemo bočne ivice same navigacije */
   }
 }

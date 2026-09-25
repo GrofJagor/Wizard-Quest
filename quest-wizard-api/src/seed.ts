@@ -115,6 +115,7 @@ async function seed() {
  
   console.log("Seeding tower (admin)...");
   const admin = towerRepo.create({
+    name: "Eastern Tower",
     email: "admin@wizardtower.dev",
     password: passwordHash,
     role: UserRole.TOWER,

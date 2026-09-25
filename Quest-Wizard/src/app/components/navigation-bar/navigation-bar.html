@@ -1,4 +1,4 @@
-<p>navigation-bar works!</p>
+<p>Navigation bar works!<p>
 <nav class="navbar">
   <div class="navbar-container">
     <!-- Logo / Brand -->
@@ -7,7 +7,12 @@
     </a>
 
     <!-- Hamburger Menu Icon for Mobile -->
-    <button class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen" aria-label="Toggle navigation">
+    <button
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation"
+    >
       <span class="bar" [class.open]="isMenuOpen"></span>
       <span class="bar" [class.open]="isMenuOpen"></span>
       <span class="bar" [class.open]="isMenuOpen"></span>
@@ -16,53 +21,53 @@
     <!-- Navigation Links -->
     <ul class="nav-menu" [class.active]="isMenuOpen">
       <li class="nav-item">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Home</a>
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMenu()"
+          >Home</a
+        >
       </li>
       <li class="nav-item">
-        <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
+        <a routerLink="/quests" routerLinkActive="active" (click)="closeMenu()">Quests</a>
       </li>
       <li class="nav-item">
-        <a routerLink="/services" routerLinkActive="active" (click)="closeMenu()">Services</a>
+        <a routerLink="/wizards" routerLinkActive="active" (click)="closeMenu()">Wizards</a>
       </li>
+     
       <li class="nav-item">
-        <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact</a>
+        <a href= "https://www.reddit.com/r/wizardposting/" routerLinkActive="active" (click)="closeMenu()">Social <fa-icon [icon]="redditIcon"></fa-icon></a>
       </li>
-      <li class="nav-item">
-        <a routerLink="/login" class="nav-btn" (click)="closeMenu()">Login</a>
-      </li>
+
+      <!-- Signed in: avatar + logout -->
+      <ng-container *ngIf="authService.currentUser$ | async as user; else guestLinks">
+        <li class="nav-item user-item">
+          <img
+            *ngIf="user.pictureUrl"
+            class="nav-avatar"
+            [src]="user.pictureUrl"
+            [alt]="user.name || user.email"
+          />
+          <div class="nav-avatar nav-avatar-fallback" *ngIf="!user.pictureUrl">
+            {{ user.role === "TOWER" ? "T" : "W" }}
+          </div>
+          <span class="nav-username">{{ user.name || user.email }}</span>
+        </li>
+        <li class="nav-item">
+          <button class="nav-btn" (click)="logout()">Logout</button>
+        </li>
+      </ng-container>
+
+      <!-- Signed out: login + register -->
+      <ng-template #guestLinks>
+        <li class="nav-item">
+          <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Login</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/register" class="nav-btn" (click)="closeMenu()">Register</a>
+        </li>
+      </ng-template>
     </ul>
   </div>
-  
-
-
-
-  <div class="nav-links">
-    <a routerLink="/quests" routerLinkActive="active">Quests</a>
-    <a routerLink="/wizards" routerLinkActive="active">Wizards</a>
-  </div>
- 
-  <div class="nav-auth" *ngIf="authService.currentUser$ | async as user; else guestLinks">
-    <div class="user-chip">
-      <img
-        *ngIf="user.pictureUrl"
-        class="user-avatar"
-        [src]="user.pictureUrl"
-        [alt]="user.name || user.email"
-      />
-      <div class="user-avatar user-avatar-fallback" *ngIf="!user.pictureUrl">
-        {{ user.role === "TOWER" ? "T" : "W" }}
-      </div>
-      <span class="user-name">{{ user.name || user.email }}</span>
-    </div>
-    <button class="logout-button" (click)="logout()">Log out</button>
-  </div>
- 
-  <ng-template #guestLinks>
-    <div class="nav-auth">
-      <a class="auth-link" routerLink="/login" routerLinkActive="active">Login</a>
-      <a class="auth-link register-link" routerLink="/register" routerLinkActive="active">
-        Register
-      </a>
-    </div>
-  </ng-template>
 </nav>

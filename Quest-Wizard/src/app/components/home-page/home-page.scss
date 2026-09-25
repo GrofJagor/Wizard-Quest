@@ -1,0 +1,225 @@
+:host {
+  display: block;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hero Styling */
+.hero-section {
+  text-align: center;
+  padding: 4rem 1rem 3rem 1rem;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-section h1 {
+  font-size: 3.5rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #c4a86b;
+  text-shadow: 0px 0px 12px rgba(196, 168, 107, 0.3);
+}
+
+.sparkle {
+  color: #c4a86b;
+  font-size: 1.5rem;
+  animation: pulse 3s infinite ease-in-out;
+}
+
+.subtitle {
+  font-style: italic;
+  font-size: 1.2rem;
+  color: rgba(217, 203, 168, 0.7);
+  margin-top: 0.5rem;
+}
+
+/* Recruitment Grid */
+.recruitment-hub {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  margin: 2rem 0 5rem 0;
+}
+
+.recruitment-card {
+  position: relative;
+  background: rgba(23, 28, 43, 0.6);
+  border: 1px solid rgba(196, 168, 107, 0.15);
+  border-radius: 4px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.recruitment-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(196, 168, 107, 0.4);
+}
+
+/* Magic card gets a warm gold tint hint */
+.magic-path .card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(122, 74, 42, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+/* Admin card gets a cold runic steel tint hint */
+.mundane-path .card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(58, 84, 62, 0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.recruitment-card h2 {
+  color: #e0d5b8;
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.description {
+  color: rgba(217, 203, 168, 0.8);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  flex-grow: 1;
+}
+
+.perks-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.perks-list li {
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+  color: rgba(217, 203, 168, 0.9);
+}
+
+/* Buttons */
+.btn {
+  font-family: 'Cinzel', serif;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+}
+
+.gold-btn {
+  border: 1px solid #c4a86b;
+  color: #c4a86b;
+}
+
+.gold-btn:hover {
+  background: #c4a86b;
+  color: #0f1420;
+  box-shadow: 0 0 15px rgba(196, 168, 107, 0.4);
+}
+
+.silver-btn {
+  border: 1px solid #a3b1c6;
+  color: #a3b1c6;
+}
+
+.silver-btn:hover {
+  background: #a3b1c6;
+  color: #0f1420;
+  box-shadow: 0 0 15px rgba(163, 177, 198, 0.4);
+}
+
+/* Quests Board */
+.quests-board {
+  margin-top: 4rem;
+}
+
+.board-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.board-header .line {
+  height: 1px;
+  flex-grow: 1;
+  background: linear-gradient(90deg, transparent, rgba(196, 168, 107, 0.3), transparent);
+}
+
+.board-header h2 {
+  font-size: 2rem;
+  color: #c4a86b;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.quest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.quest-item {
+  background: rgba(10, 14, 23, 0.5);
+  border-left: 3px solid #c4a86b;
+  padding: 1.5rem;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.quest-status {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #5ea36c;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.quest-item h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.25rem;
+  color: #e0d5b8;
+}
+
+.quest-item p {
+  font-size: 0.9rem;
+  color: rgba(217, 203, 168, 0.7);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.quest-footer {
+  border-top: 1px solid rgba(196, 168, 107, 0.1);
+  padding-top: 0.75rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(217, 203, 168, 0.9);
+}
+
+.reward-label {
+  color: #c4a86b;
+  font-style: normal;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+}

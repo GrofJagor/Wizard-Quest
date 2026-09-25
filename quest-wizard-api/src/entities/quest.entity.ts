@@ -10,6 +10,7 @@ import { Wizard } from "./wizard.entity.js";
 import { Tower } from "./tower.entity.js";
 
 export type QuestLevel = "EASY" | "MEDIUM" | "HARD" | "DEADLY";
+export type QuestStatus = "OPEN" | "IN_PROGRESS" | "COMPLETED";
 
 @Entity("quests")
 export class Quest {
@@ -33,7 +34,7 @@ export class Quest {
   reward: number;
 
   @Column({ type: "nvarchar", length: 50, default: "OPEN" })
-  status: string;
+  status: QuestStatus;
 
   // U SQL Serveru se boolean mapira kao 'bit' tip podatka
   @Column({ type: "bit", default: true })

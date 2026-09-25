@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserRole } from '../../models/auth';
 
 @Component({
@@ -14,12 +14,15 @@ export class RegisterForm {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
  
+  private initialRole = (this.route.snapshot.paramMap.get('user')?.toUpperCase() as UserRole) || 'WIZARD';
+
   loading = false;
   errorMessage: string | null = null;
  
   form = this.fb.group({
-    role: ["WIZARD" as UserRole, [Validators.required]],
+    role: [this.initialRole, [Validators.required]],
     email: ["", [Validators.required, Validators.email]],
     password: ["", [Validators.required, Validators.minLength(8)]],
     name: [""],

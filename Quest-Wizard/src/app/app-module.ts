@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { QuestBoard } from './components/quest-board/quest-board';
 import { QuestDetails } from './components/quest-details/quest-details';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -22,6 +22,8 @@ import { wizardsReducer } from './store/wizard.reducer';
 import { WizardsEffects } from './store/wizard.effects';
 import { LoginForm } from './components/login-form/login-form';
 import { RegisterForm } from './components/register-form/register-form';
+import { authInterceptor } from './services/auth.interceptor';
+import { HomePage } from './components/home-page/home-page';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,7 @@ import { RegisterForm } from './components/register-form/register-form';
     WizardProfile,
     LoginForm,
     RegisterForm,
+    HomePage,
   ],
   imports: [
     FontAwesomeModule,
@@ -48,7 +51,10 @@ import { RegisterForm } from './components/register-form/register-form';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false }),
     EffectsModule.forRoot([QuestsEffects, WizardsEffects]),
   ],
-  providers: [provideBrowserGlobalErrorListeners()],
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideHttpClient(withInterceptors([authInterceptor])),
+  ],
   bootstrap: [App],
 })
 export class AppModule {}

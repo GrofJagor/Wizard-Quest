@@ -1,0 +1,66 @@
+<div class="app-frame">
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="logo-container">
+      <span class="sparkle">✦</span>
+      <h1>QuestWizard</h1>
+      <span class="sparkle">✦</span>
+    </div>
+    <p class="subtitle">Where Mythical Chaos Meets Methodical Order</p>
+  </header>
+
+  <!-- Recruitment Hub -->
+  <main class="recruitment-hub">
+    
+    <!-- Path of Magic -->
+    <section class="recruitment-card magic-path">
+      <div class="card-glow"></div>
+      <h2>Join the Order of Wizards</h2>
+      <p class="description">
+        Do you command the arcane? Are your scrolls bursting with unchanneled localized lightning? We need powerful casters to step through the rifts.
+      </p>
+      <ul class="perks-list">
+        <li>✦ Access to the Infinite Library</li>
+        <li>✦ Generous material stipends (dragon scales included)</li>
+        <li>✦ Standardized health wards against polymorph accidents</li>
+      </ul>
+      <button routerLink="/register" routerLinkActive="active" class="btn gold-btn" (click)="onJoinOrder()">Walk the Path of Magic</button>
+    </section>
+
+    <!-- Path of Mundane Might -->
+    <section class="recruitment-card mundane-path">
+      <div class="card-glow"></div>
+      <h2>Tower Administration & Logistics</h2>
+      <p class="description">
+        Zero magical affinity? Perfect. Someone needs to keep this Tower from burning down. We need organized scribes, inventory managers, and crystal-ball mechanics.
+      </p>
+      <ul class="perks-list">
+        <li>✦ Safe, mostly non-hazardous working conditions</li>
+        <li>✦ Competitive dental (vital around familiars)</li>
+        <li>✦ 100% spell-immunity uniform coverage</li>
+      </ul>
+      <button routerLink="/register" routerLinkActive="active" class="btn silver-btn" (click)="onApplyAdmin()">Submit Application Parchment</button>
+    </section>
+
+  </main>
+
+  <!-- Accomplished Quests Board -->
+  <section class="quests-board">
+    <div class="board-header">
+      <div class="line"></div>
+      <h2>Legendary Deeds Accomplished</h2>
+      <div class="line"></div>
+    </div>
+    
+    <div class="quest-grid">
+      <article class="quest-item" *ngFor="let quest of epicQuests">
+        <div class="quest-status">✔ {{ quest.status }}</div>
+        <h3>{{ quest.title }}</h3>
+        <p>{{ quest.description }}</p>
+        <div class="quest-footer">
+          <span class="reward-label">Bounty Settled:</span> {{ quest.reward }}
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

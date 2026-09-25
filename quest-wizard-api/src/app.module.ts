@@ -10,6 +10,7 @@ import { Wizard } from './entities/wizard.entity.js';
 import { UsersModule } from './users/users/users.module.js';
 import { AuthModule } from './auth/auth/auth.module.js';
 import { QuestsModule } from './quests/quests/quests.module.js';
+import { WizardsModule } from './users/wizards/wizards.module.js';
 
 
 @Module({
@@ -35,6 +36,7 @@ import { QuestsModule } from './quests/quests/quests.module.js';
     UsersModule,
     AuthModule,
     QuestsModule,
+    WizardsModule,
   ],
 })
 export class AppModule {}
