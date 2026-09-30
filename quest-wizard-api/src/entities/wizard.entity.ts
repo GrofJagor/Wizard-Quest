@@ -19,6 +19,8 @@ export class Wizard extends User {
   @Column({ type: "nvarchar", length: 500, nullable: true })
   pictureUrl: string;
  
+  @Column({type: "bit", default: 0})
+  isOnActiveQuest: boolean;
   // Relacije (ManyToMany i ManyToOne) ne prave problem, ostaju iste
   @ManyToMany(() => Quest, (quest) => quest.completedByWizards)
   @JoinTable({ name: "wizard_completed_quests" })

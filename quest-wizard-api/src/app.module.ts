@@ -19,17 +19,17 @@ import { WizardsModule } from './users/wizards/wizards.module.js';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        type: "mssql", // SQL Server Express. Swap to 'postgres'/'mysql' if that's your target instead.
+        type: "mssql", 
         host: config.get<string>("DB_HOST", "localhost"),
         port: +config.get<number>("DB_PORT", 1433),
         username: config.get<string>("DB_USERNAME"),
         password: config.get<string>("DB_PASSWORD"),
         database: config.get<string>("DB_DATABASE"),
         entities: [User, Wizard, Tower, Quest],
-        synchronize: true, // dev only — use migrations in production
+        synchronize: true, 
         options: {
-          encrypt: false, // set true if connecting to Azure SQL
-          trustServerCertificate: true, // needed for local SQL Server Express over self-signed cert
+          encrypt: false, 
+          trustServerCertificate: true, 
         },
       }),
     }),

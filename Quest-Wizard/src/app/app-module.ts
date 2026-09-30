@@ -24,6 +24,7 @@ import { LoginForm } from './components/login-form/login-form';
 import { RegisterForm } from './components/register-form/register-form';
 import { authInterceptor } from './services/auth.interceptor';
 import { HomePage } from './components/home-page/home-page';
+import { WizardBoard } from './components/wizard-board/wizard-board';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { HomePage } from './components/home-page/home-page';
     LoginForm,
     RegisterForm,
     HomePage,
+    WizardBoard,
   ],
   imports: [
     FontAwesomeModule,

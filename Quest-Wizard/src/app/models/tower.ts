@@ -1,6 +1,8 @@
 
 export interface Tower {
-  id: number;
-  name: string;
-  
+  id: string;
+  email: string;
+  name:string;
+  rank: string;
 }
+ 

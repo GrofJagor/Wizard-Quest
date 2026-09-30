@@ -28,6 +28,18 @@ async function seed() {
   // POPRAVLJENO: Umesto .delete({}) koristimo sirovi SQL DELETE da TypeORM ne baci grešku
   await userRepo.query("DELETE FROM users");
   await questRepo.query("DELETE FROM quests");
+  
+  const passwordHash = await bcrypt.hash(SEED_PASSWORD, 10);
+  console.log("Seeding tower (admin)...");
+  const admin = towerRepo.create({
+    name: "Eastern Tower",
+    email: "admin@wizardtower.dev",
+    password: passwordHash,
+    role: UserRole.TOWER,
+    rank: "HIGH_ADMIN",
+  });
+
+  await towerRepo.save(admin);
  
   console.log("Seeding quests...");
   const [wyrmroot, grimoire, escort, hollowKing] = await questRepo.save([
@@ -39,6 +51,7 @@ async function seed() {
       reward: 500,
       status: "OPEN",
       open: true,
+      createdByTower: admin
     }),
     questRepo.create({
       title: "Retrieve the Moonlit Grimoire",
@@ -48,6 +61,7 @@ async function seed() {
       reward: 250,
       status: "COMPLETED",
       open: false,
+      createdByTower: admin
     }),
     questRepo.create({
       title: "Escort the Alchemist to Brindlewatch",
@@ -57,6 +71,7 @@ async function seed() {
       reward: 120,
       status: "COMPLETED",
       open: false,
+      createdByTower: admin
     }),
     questRepo.create({
       title: "Banish the Hollow King",
@@ -66,23 +81,24 @@ async function seed() {
       reward: 1000,
       status: "OPEN",
       open: true,
+      createdByTower: admin
     }),
   ]);
- 
+  
   console.log("Seeding wizards...");
-  const passwordHash = await bcrypt.hash(SEED_PASSWORD, 10);
- 
+  
   const elowen = wizardRepo.create({
-    email: "elowen@wizardtower.dev",
+    email: "Gandalf@wizardtower.dev",
     password: passwordHash,
     role: UserRole.WIZARD,
-    name: "Elowen Thornveil",
+    name: "Gandalf the Gray",
     level: 12,
-    affinity: "Verdant",
+    affinity: "Hope",
     xp: 68,
-    pictureUrl: "https://example.com/elowen.jpg",
+    pictureUrl: "https://i.pinimg.com/474x/40/48/17/404817db5ec123721a0f418096f37929.jpg",
     completedQuests: [grimoire, escort],
     activeQuest: wyrmroot,
+    isOnActiveQuest: true,
   });
  
   const darius = wizardRepo.create({
@@ -96,6 +112,7 @@ async function seed() {
     pictureUrl: "https://example.com/darius.jpg",
     completedQuests: [escort],
     activeQuest: hollowKing,
+    isOnActiveQuest: true,
   });
  
   const nym = wizardRepo.create({
@@ -106,21 +123,13 @@ async function seed() {
     level: 3,
     affinity: "Umbral",
     xp: 12,
-    pictureUrl: "https://example.com/nym.jpg",
+    pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/e/ea/GANDALF.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
     completedQuests: [],
     activeQuest: null,
+    isOnActiveQuest:false,
   });
  
   await wizardRepo.save([elowen, darius, nym]);
- 
-  console.log("Seeding tower (admin)...");
-  const admin = towerRepo.create({
-    name: "Eastern Tower",
-    email: "admin@wizardtower.dev",
-    password: passwordHash,
-    role: UserRole.TOWER,
-    rank: "HIGH_ADMIN",
-  });
  
   await towerRepo.save(admin);
  

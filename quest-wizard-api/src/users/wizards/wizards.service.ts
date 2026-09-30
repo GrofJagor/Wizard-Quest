@@ -7,8 +7,7 @@ import { UpdateWizardProfileDto } from '../../dto/update.wizard.profile.dto.js';
 
 export class WizardsService {
   constructor(@InjectRepository(Wizard) private readonly wizardRepo: Repository<Wizard>) {}
- 
-  /** All wizards. */
+
   findAll(): Promise<Wizard[]> {
     return this.wizardRepo.find();
   }
@@ -21,7 +20,7 @@ export class WizardsService {
     return wizard;
   }
  
-  /** Edits a wizard's profile fields (name, affinity, picture, level, xp). */
+
   async updateProfile(id: string, dto: UpdateWizardProfileDto): Promise<Wizard> {
     const wizard = await this.findOne(id);
  
@@ -43,8 +42,24 @@ export class WizardsService {
     }
   }
  
-  /** Wizards currently not on any quest — available to be assigned one. */
+
   findWizardsWithNoActiveQuest(): Promise<Wizard[]> {
     return this.wizardRepo.find({ where: { activeQuest: IsNull() } });
   }
 }
+
+// async findWizardsWithNoActiveQuest(): Promise<WizardActiveQuestDto[]> {
+//      const wizard = await this.wizardRepo.find({ where: { activeQuest: IsNull() } });
+ 
+//     const wizards: WizardActiveQuestDto[] = wizard.map(wizard => ({
+//     name: wizard.name,
+//     level: wizard.level,
+//     affinity: wizard.affinity,
+//     xp: wizard.xp, // 1-100
+//     pictureUrl: wizard.pictureUrl,
+//     activeQuest: wizard.activeQuest?.id || null,
+//   }));
+ 
+//     return wizards;
+//   }
+// }

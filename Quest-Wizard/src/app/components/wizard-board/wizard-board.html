@@ -1,0 +1,41 @@
+<div class="wizard-board">
+  <header class="board-header">
+    <h1 class="board-title">Order of Wizards</h1>
+    <div class="board-divider"></div>
+  </header>
+
+  @if (wizards | async; as wizardsList) {
+    <div class="wizard-grid">
+      @for (wizard of wizardsList; track wizard.name) {
+        <div class="wizard-card">
+    
+          <div class="aura-glow"></div>
+          
+      
+          <div class="portrait-container">
+            <img [src]="wizard.pictureUrl" [alt]="wizard.name" class="wizard-portrait">
+            <div class="frame-overlay"></div>
+            <div class="wizard-level">
+              <span class="level-label">LVL</span>
+              <span class="level-value">{{ wizard.level }}</span>
+            </div>
+          </div>
+
+     
+          <div class="wizard-info">
+            <h2 class="wizard-name">{{ wizard.name }}</h2>
+            <div class="affinity-badge">
+              <span class="element-icon"></span>
+              <span class="affinity-text">{{ wizard.affinity }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+  
+    <div class="loading-container">
+      <p>Loading wizards from Grimoire...</p>
+    </div>
+  }
+</div>

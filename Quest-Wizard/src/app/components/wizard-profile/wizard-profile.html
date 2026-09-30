@@ -1,5 +1,4 @@
-<p>wizard-profile works!</p>
-<section class="grimoire-card">
+<section class="grimoire-card" *ngIf="wizard1 | async as wizard">
   <div class="frame-corner corner-tl"></div>
   <div class="frame-corner corner-tr"></div>
   <div class="frame-corner corner-bl"></div>
@@ -14,9 +13,8 @@
       />
     </div>
 
-    <div class="identity">
+    <div>
       <h1 class="wizard-name">{{ wizard.name }}</h1>
-      <p class="wizard-id">Sigil No. {{ wizard.id }}</p>
 
       <div class="stat-row">
         <span class="stat-badge level-badge">Level {{ wizard.level }}</span>
@@ -28,10 +26,10 @@
   <div class="xp-section">
     <div class="xp-label">
       <span>Arcane Mastery</span>
-      <span>{{ xpClamped }} / 100</span>
+      <span>{{ getXpClamped(wizard.xp) }} / 100</span>
     </div>
     <div class="xp-track">
-      <div class="xp-fill" [style.width.%]="xpClamped"></div>
+      <div class="xp-fill" [style.width.%]="getXpClamped(wizard.xp)"></div>
     </div>
   </div>
 
@@ -39,7 +37,7 @@
     <h2 class="section-title">Active Quest</h2>
     <div class="active-quest" *ngIf="wizard.activeQuestId; else noQuest">
       <span class="quest-icon">✦</span>
-      <span>{{ wizard.activeQuestId }}</span>                                       <!-- doradi -->
+      <span>{{ wizard.activeQuestId }}</span>
     </div>
     <ng-template #noQuest>
       <p class="empty-note">No quest bound to this wizard's fate right now.</p>
@@ -49,13 +47,13 @@
   <div class="quest-section">
     <h2 class="section-title">
       Completed Quests
-      <span class="quest-count">{{ wizard.completedQuestIds.length }}</span>
+      <span class="quest-count" *ngIf="wizard.completedQuestIds">{{ wizard.completedQuestIds.length }}</span>
     </h2>
 
-    <ul class="quest-list" *ngIf="wizard.completedQuestIds.length; else noCompleted">
+    <ul class="quest-list" *ngIf="wizard.completedQuestIds; else noCompleted">
       <li *ngFor="let quest of wizard.completedQuestIds">
         <span class="quest-icon done">✓</span>
-        <span>{{ quest }}</span>                                              <!-- doradi -->
+        <span>{{ quest }}</span>
       </li>
     </ul>
     <ng-template #noCompleted>

@@ -17,14 +17,14 @@ interface RequestUser {
 export class WizardsController {
   constructor(private readonly wizardsService: WizardsService) {}
  
-  // ---- specific routes before the :id param route ----
+
  
   @Get("without-active-quest")
   getWithoutActiveQuest() {
     return this.wizardsService.findWizardsWithNoActiveQuest();
   }
  
-  // ---- basic CRUD ----
+
  
   @Get()
   findAll() {
@@ -35,8 +35,7 @@ export class WizardsController {
   findOne(@Param("id", ParseUUIDPipe) id: string) {
     return this.wizardsService.findOne(id);
   }
- 
-  // A wizard may edit their OWN profile; a Tower (admin) may edit anyone's.
+
   @UseGuards(JwtAuthGuard)
   @Patch(":id")
   updateProfile(

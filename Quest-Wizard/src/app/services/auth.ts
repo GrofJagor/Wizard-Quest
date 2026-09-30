@@ -12,7 +12,7 @@ import { environment } from "../../environments/environment";
 
 export const AUTH_TOKEN_KEY = "wizard_tower_token";
 
-// Adjust to wherever your NestJS API actually runs.
+
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -20,11 +20,10 @@ export class AuthService {
   private router = inject(Router);
 
   private currentUserSubject = new BehaviorSubject<CurrentUserProfile | null>(null);
-  /** Emits the logged-in user's full profile, or null when signed out. */
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
-    // On app boot, if a token is already stored, try to restore the session.
+
     this.restoreSession();
   }
 

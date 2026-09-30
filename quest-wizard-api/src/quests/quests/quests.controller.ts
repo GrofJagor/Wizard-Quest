@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Param,
   ParseIntPipe,
@@ -17,13 +18,22 @@ import { UserRole } from "../../entities/user.entity.js";
 import { Roles } from "../../decorators/roles.decorator.js";
 import { CreateQuestDto } from "../../dto/crete.quest.dto.js";
 import { UpdateQuestDto } from "../../dto/update.quest.dto.js";
+import { CurrentUser } from "../../decorators/current.user.decorator.js";
+import { JoinQuestDto } from "../../dto/join.quest.dto.js";
 
 
+ 
+interface RequestUser {
+  userId: string;
+  email: string;
+  role: UserRole;
+}
+ 
 @Controller("quests")
 export class QuestsController {
   constructor(private readonly questsService: QuestsService) {}
  
-  // ---- basic CRUD ----
+
  
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.TOWER)
@@ -56,7 +66,7 @@ export class QuestsController {
     return this.questsService.remove(id);
   }
  
-  // ---- status-filtered lookups ----
+
  
   @Get("status/open")
   getOpenQuests() {
@@ -72,8 +82,20 @@ export class QuestsController {
   getCompletedQuests() {
     return this.questsService.findCompletedQuests();
   }
- 
-  // ---- relation-based lookups ----
+
+  @UseGuards(JwtAuthGuard)
+  @Post(":id/join")
+  join(
+    @Param("id", ParseIntPipe) questId: number,
+    @Body() dto: JoinQuestDto,
+    @CurrentUser() user: RequestUser
+  ) {
+    if (user.role !== UserRole.TOWER && user.userId !== dto.wizardId) {
+      throw new ForbiddenException("You can only join a quest as yourself.");
+    }
+    return this.questsService.joinWizardToQuest(questId, dto.wizardId);
+  }
+
  
   @UseGuards(JwtAuthGuard)
   @Get("wizard/:wizardId/completed")
@@ -87,3 +109,4 @@ export class QuestsController {
     return this.questsService.getQuestsCreatedByTower(towerId);
   }
 }
+ 

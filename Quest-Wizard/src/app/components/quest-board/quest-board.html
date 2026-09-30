@@ -79,8 +79,8 @@
         
         <!-- Lista čarobnjaka složena u jedan red razdvojen zarezima -->
         <td>
-          <span *ngFor="let wizard of quest.activeWizardIds; let last = last">
-            {{ wizard }}{{ !last ? ', ' : '' }}
+          <span *ngFor="let wizard of quest.activeWizards; let last = last">
+            {{ wizard.name }}{{ !last ? ', ' : '' }}
           </span>
         </td>
         

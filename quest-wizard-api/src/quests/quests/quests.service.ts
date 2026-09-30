@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsRelations, Repository } from "typeorm";
 import { Quest, QuestStatus } from "../../entities/quest.entity.js";
 import { Wizard } from "../../entities/wizard.entity.js";
 import { Tower } from "../../entities/tower.entity.js";
@@ -8,6 +8,12 @@ import { CreateQuestDto } from "../../dto/crete.quest.dto.js";
 import { UpdateQuestDto } from "../../dto/update.quest.dto.js";
 
 
+const QUEST_RELATIONS: FindOptionsRelations<Quest> = {
+  completedByWizards: true,
+  activeWizards: true,
+  createdByTower: true,
+};
+ 
 @Injectable()
 export class QuestsService {
   constructor(
@@ -15,8 +21,7 @@ export class QuestsService {
     @InjectRepository(Wizard) private readonly wizardRepo: Repository<Wizard>,
     @InjectRepository(Tower) private readonly towerRepo: Repository<Tower>
   ) {}
- 
-  // ---- basic CRUD ("getters and setters") ----
+
  
   async create(dto: CreateQuestDto): Promise<Quest> {
     let createdByTower: Tower | null = null;
@@ -43,13 +48,13 @@ export class QuestsService {
   }
  
   findAll(): Promise<Quest[]> {
-    return this.questRepo.find();
+    return this.questRepo.find({ relations: QUEST_RELATIONS });
   }
  
   async findOne(id: number): Promise<Quest> {
     const quest = await this.questRepo.findOne({
       where: { id },
-      relations: { createdByTower: true },
+      relations: QUEST_RELATIONS,
     });
     if (!quest) {
       throw new NotFoundException(`Quest ${id} not found`);
@@ -90,42 +95,39 @@ export class QuestsService {
     }
   }
  
-  // ---- status-filtered lookups ----
+
  
   findByStatus(status: QuestStatus): Promise<Quest[]> {
-    return this.questRepo.find({ where: { status } });
+    return this.questRepo.find({ where: { status }, relations: QUEST_RELATIONS });
   }
  
-  /** Quests not yet started (aka "open" / "not started"). */
+
   findOpenQuests(): Promise<Quest[]> {
     return this.findByStatus("OPEN");
   }
  
-  /** Quests currently being worked on by one or more wizards. */
+
   findInProgressQuests(): Promise<Quest[]> {
     return this.findByStatus("IN_PROGRESS");
   }
- 
-  /** Quests that have been finished. */
+
   findCompletedQuests(): Promise<Quest[]> {
     return this.findByStatus("COMPLETED");
   }
  
-  // ---- relation-based lookups ----
- 
-  /** All quests a given wizard has completed. */
+
   async getCompletedQuestsForWizard(wizardId: string): Promise<Quest[]> {
-    const wizard = await this.wizardRepo.findOne({
-      where: { id: wizardId },
-      relations: { completedQuests: true },
-    });
-    if (!wizard) {
+    const wizardExists = await this.wizardRepo.exists({ where: { id: wizardId } });
+    if (!wizardExists) {
       throw new NotFoundException(`Wizard ${wizardId} not found`);
     }
-    return wizard.completedQuests;
+ 
+    return this.questRepo.find({
+      where: { completedByWizards: { id: wizardId } },
+      relations: QUEST_RELATIONS,
+    });
   }
  
-  /** All quests created by a given tower (admin). */
   async getQuestsCreatedByTower(towerId: string): Promise<Quest[]> {
     const tower = await this.towerRepo.findOne({ where: { id: towerId } });
     if (!tower) {
@@ -134,7 +136,31 @@ export class QuestsService {
  
     return this.questRepo.find({
       where: { createdByTower: { id: towerId } },
+      relations: QUEST_RELATIONS,
     });
   }
-}
  
+
+  async joinWizardToQuest(questId: number, wizardId: string): Promise<Quest> {
+    const quest = await this.questRepo.findOne({ where: { id: questId } });
+    if (!quest) {
+      throw new NotFoundException(`Quest ${questId} not found`);
+    }
+ 
+    const wizard = await this.wizardRepo.findOne({ where: { id: wizardId } });
+    if (!wizard) {
+      throw new NotFoundException(`Wizard ${wizardId} not found`);
+    }
+ 
+    wizard.activeQuest = quest;
+    await this.wizardRepo.save(wizard);
+ 
+
+    if (quest.status === "OPEN") {
+      quest.status = "IN_PROGRESS";
+      await this.questRepo.save(quest);
+    }
+ 
+    return this.findOne(questId);
+  }
+}

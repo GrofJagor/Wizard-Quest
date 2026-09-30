@@ -22,6 +22,7 @@ export class App implements OnInit {
   ngOnInit() {
     this.store.dispatch(QuestActions.loadQuests());
     this.store.dispatch(WizardActions.loadWizards());
+    //this.store.dispatch(WizardActions.loadWizardsWithoutActiveQuest());
     this.wizards = this.store.select(selectAllWizards);
     
   }

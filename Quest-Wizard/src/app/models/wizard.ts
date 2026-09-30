@@ -5,8 +5,9 @@ export interface Wizard {
   level: number;
   affinity: string;
   xp: number; 
-  completedQuestIds: number[]; 
-  activeQuestId: number | null; 
+  completedQuestIds?: number[]; 
+  activeQuestId?: number | null; 
   pictureUrl: string;
+  isOnActiveQuest: boolean;
 }
  

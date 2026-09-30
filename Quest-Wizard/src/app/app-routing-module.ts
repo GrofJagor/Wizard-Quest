@@ -6,15 +6,16 @@ import { QuestBoard } from './components/quest-board/quest-board';
 import { WizardList } from './components/wizard-list/wizard-list';
 import { HomePage } from './components/home-page/home-page';
 import { WizardProfile } from './components/wizard-profile/wizard-profile';
+import { WizardBoard } from './components/wizard-board/wizard-board';
 
 const routes: Routes = [
   {path: 'login', component:LoginForm},
   {path: 'register', component:RegisterForm},
   {path: 'quests', component:QuestBoard},
-  {path: 'wizards', component:WizardList},
+  {path: 'wizards', component:WizardBoard},
   {path: '', component:HomePage},
   {path: 'register/:user', component:RegisterForm},
-  {path: 'profile', component:WizardProfile}
+  {path: 'profile/:user', component:WizardProfile},
 ];
 
 @NgModule({

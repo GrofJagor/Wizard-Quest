@@ -10,12 +10,7 @@ export interface WizardView extends Omit<Wizard, "completedQuestIds" | "activeQu
   completedQuests: Quest[];
   activeQuest: Quest | null;
 }
-
-export interface QuestView extends Omit<Quest, "completedByWizardIds" | "activeWizardIds"> {
-  completedByWizards: Wizard[];
-  activeWizards: Wizard[];
-}
-
+ 
 /** Joins a single wizard with its full completed-quest and active-quest objects. */
 export const selectWizardView = (wizardId: string) =>
   createSelector(
@@ -24,16 +19,17 @@ export const selectWizardView = (wizardId: string) =>
     (wizard, quests): WizardView | null => {
       if (!wizard) return null;
       const { completedQuestIds, activeQuestId, ...rest } = wizard;
+ 
       return {
         ...rest,
-        completedQuests: completedQuestIds
+        completedQuests: (completedQuestIds ?? [])
           .map((id) => quests[id])
           .filter((q): q is Quest => !!q),
-        activeQuest: activeQuestId ? quests[activeQuestId] ?? null : null,
+        activeQuest: activeQuestId ? (quests[activeQuestId] ?? null) : null,
       };
     }
   );
-
+ 
 /** Joins every wizard with its full quest objects — use sparingly, prefer selectWizardView for one profile page. */
 export const selectAllWizardViews = createSelector(
   selectWizardsEntities,
@@ -45,30 +41,14 @@ export const selectAllWizardViews = createSelector(
         const { completedQuestIds, activeQuestId, ...rest } = wizard;
         return {
           ...rest,
-          completedQuests: completedQuestIds
+          completedQuests: (completedQuestIds ?? [])
             .map((id) => quests[id])
             .filter((q): q is Quest => !!q),
-          activeQuest: activeQuestId ? quests[activeQuestId] ?? null : null,
+          activeQuest: activeQuestId ? (quests[activeQuestId] ?? null) : null,
         };
       })
 );
-
-/** Joins a single quest with the full wizard objects on both sides of the relationship. */
-export const selectQuestView = (questId: number) =>
-  createSelector(
-    selectQuestById(questId),
-    selectWizardsEntities,
-    (quest, wizards): QuestView | null => {
-      if (!quest) return null;
-      const { completedByWizardIds, activeWizardIds, ...rest } = quest;
-      return {
-        ...rest,
-        completedByWizards: completedByWizardIds
-          .map((id) => wizards[id])
-          .filter((w): w is Wizard => !!w),
-        activeWizards: activeWizardIds
-          .map((id) => wizards[id])
-          .filter((w): w is Wizard => !!w),
-      };
-    }
-  );
+ 
+// Re-exported so existing imports of `selectQuestById` from this file don't
+// break — but for new code, import it directly from quest.selectors instead.
+export { selectQuestById };

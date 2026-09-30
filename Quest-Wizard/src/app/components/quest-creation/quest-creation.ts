@@ -5,77 +5,15 @@ import { Wizard } from '../../models/wizard';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppState } from '../../store/app-state';
 import { Store } from '@ngrx/store';
-import { selectAllWizards } from '../../store/wizard.selectors';
+import { selectAllWizards, selectWizardsWithoutActiveQuest } from '../../store/wizard.selectors';
+import { faGlassMartiniAlt } from '@fortawesome/free-solid-svg-icons';
+import se from '@angular/common/locales/se';
+import { selectAllQuests } from '../../store/quest.selectors';
+import { selectAllWizardViews } from '../../store/quest-wizard.selectors';
 
 
 
-// export const MOCK_WIZARDS: Wizard[] = [
-//   {
-//     id: "wiz-001",
-//     name: "Eldrin Stormweaver",
-//     level: 14,
-//     affinity: "Lightning",
-//     xp: 72,
-//     completedQuests: [
-//       {
-//         id: 101,
-//         title: "The Spark of Awakening",
-//         level: "EASY",
-//         patron: "user_archmage_99",
-//         description: "Retrieve the charged crystal from the Thunder Peaks.",
-//         reward: 150,
-//         wizards: ["wiz-001"],
-//         status: "COMPLETED",
-//         open: false
-//       },
-//       {
-//         id: 102,
-//         title: "Calming the Tempest",
-//         level: "MEDIUM",
-//         patron: "user_king_arthur",
-//         description: "Help the village of Oakhaven stop an unnatural storm.",
-//         reward: 500,
-//         wizards: ["wiz-001", "wiz-003"],
-//         status: "COMPLETED",
-//         open: false
-//       }
-//     ],
-//     activeQuest: {
-//       id: 201,
-//       title: "Charging the Monolith",
-//       level: "HARD",
-//       patron: "user_council_elder",
-//       description: "Channel 10,000 volts of pure energy into the ancient spire.",
-//       reward: 1200,
-//       wizards: ["wiz-001"],
-//       status: "IN_PROGRESS",
-//       open: false
-//     },
-//     pictureUrl: "https://example.com"
-//   },
-//   {
-//     id: "wiz-002",
-//     name: "Morgath the Shadowweaver",
-//     level: 28,
-//     affinity: "Necromancy",
-//     xp: 45,
-//     completedQuests: [
-//       {
-//         id: 88,
-//         title: "Graveyard Shift",
-//         level: "MEDIUM",
-//         patron: "user_necromancer_lord",
-//         description: "Animate 50 skeletons for the castle defense.",
-//         reward: 350,
-//         wizards: ["wiz-002"],
-//         status: "COMPLETED",
-//         open: false
-//       }
-//     ],
-//     activeQuest: null,
-//     pictureUrl: "https://example.com"
-//   }
-// ];
+
 
 const LEVELS: QuestLevel[] = ['EASY', 'MEDIUM', 'HARD','DEADLY'];
 
@@ -93,7 +31,8 @@ export class QuestCreation
   @Output() questCreated = new EventEmitter<Quest>();
 
   readonly levels = LEVELS;
-  readonly wizards = this.store.select(selectAllWizards);;
+  readonly wizards = this.store.select(selectWizardsWithoutActiveQuest);
+  
  
 
   selectedWizardIds: string[] = [];
@@ -129,6 +68,7 @@ export class QuestCreation
  
   submit(): void {
     this.submitAttempted = true;
+    
  
     const wizardSelectionValid = this.openToAll || this.selectedWizardIds.length > 0;
  
@@ -148,11 +88,18 @@ export class QuestCreation
       description: description!.trim(),
       reward: reward!,
       open: openToAll!,
+      createdByTower: {
+        id: "1",
+        email:"gmail@gmail.com",
+        rank: "L",
+        name:"name",
+      },
      // wizards: openToAll ? [] : [...this.selectedWizardIds],
-      completedByWizardIds:[],
-      activeWizardIds:[]
+      completedByWizards:[],
+      activeWizards:[]
     };
  
+
     this.questCreated.emit(quest);
     this.resetForm();
   }

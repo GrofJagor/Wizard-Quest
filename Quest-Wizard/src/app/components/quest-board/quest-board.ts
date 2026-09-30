@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Quest } from '../../models/quest';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-state';
-import { selectAllQuests } from '../../store/quest.selectors';
+import { selectAllQuests, selectOpenStatusQuests } from '../../store/quest.selectors';
 import { loadQuests } from '../../store/quest.actions';
 
 @Component({
@@ -28,9 +28,12 @@ export class QuestBoard implements OnInit{
 
   ngOnInit(): void {
    // this.store.dispatch(QuestActions.loadQuests());
-    this.quests = this.store.select(selectAllQuests);
+    this.quests = this.store.select(selectOpenStatusQuests);
     this.quests.forEach(quest=>console.log(quest));
     
   }
 
+
+
+  
 }

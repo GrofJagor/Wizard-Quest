@@ -26,7 +26,6 @@ export class UsersService {
     @InjectRepository(Tower) private readonly towerRepo: Repository<Tower>
   ) {}
  
-  /** Looks up a user regardless of role. Includes password (needed for login check). */
   findByEmailWithPassword(email: string): Promise<User | null> {
     return this.userRepo
       .createQueryBuilder("user")

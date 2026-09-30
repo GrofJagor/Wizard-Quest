@@ -43,6 +43,7 @@
       <!-- Signed in: avatar + logout -->
       <ng-container *ngIf="authService.currentUser$ | async as user; else guestLinks">
         <li class="nav-item user-item">
+          <a class="nav-item user-item" routerLink="/profile/{{user.id}}" routerLinkActive="active" (click)="closeMenu()">
           <img
             *ngIf="user.pictureUrl"
             class="nav-avatar"
@@ -53,6 +54,7 @@
             {{ user.role === "TOWER" ? "T" : "W" }}
           </div>
           <span class="nav-username">{{ user.name || user.email }}</span>
+        </a>
         </li>
         <li class="nav-item">
           <button class="nav-btn" (click)="logout()">Logout</button>

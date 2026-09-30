@@ -11,7 +11,7 @@ import { Tower } from "../../entities/tower.entity.js";
 @Module({
   imports: [
     TypeOrmModule.forFeature([Quest, Wizard, Tower]),
-    PassportModule.register({ defaultStrategy: "jwt" }), // needed for JwtAuthGuard/RolesGuard in this module's controller
+    PassportModule.register({ defaultStrategy: "jwt" }), 
   ],
   providers: [QuestsService],
   controllers: [QuestsController],
