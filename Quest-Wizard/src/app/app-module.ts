@@ -25,13 +25,17 @@ import { RegisterForm } from './components/register-form/register-form';
 import { authInterceptor } from './services/auth.interceptor';
 import { HomePage } from './components/home-page/home-page';
 import { WizardBoard } from './components/wizard-board/wizard-board';
+import { towersReducer } from './store/tower.reducer';
+import { TowersEffects } from './store/tower.effects';
+import { CommonModule } from '@angular/common';
+
 
 @NgModule({
   declarations: [
     App,
     QuestBoard,
-    QuestDetails,
     NavigationBar,
+    QuestDetails,
     QuestCreation,
     WizardList,
     WizardProfile,
@@ -45,13 +49,15 @@ import { WizardBoard } from './components/wizard-board/wizard-board';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    CommonModule,
     FormsModule,
     HttpClientModule,
     StoreModule.forFeature('quests', questsReducer),
     StoreModule.forFeature('wizards', wizardsReducer),
-    StoreModule.forRoot({ quests: questsReducer, wizards: wizardsReducer }),
+    StoreModule.forFeature('towers', towersReducer),
+    StoreModule.forRoot({ quests: questsReducer, wizards: wizardsReducer, towers: towersReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false }),
-    EffectsModule.forRoot([QuestsEffects, WizardsEffects]),
+    EffectsModule.forRoot([QuestsEffects, WizardsEffects, TowersEffects]),
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

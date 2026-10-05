@@ -1,13 +1,13 @@
+import { Quest } from "./quest";
 
 export interface Wizard {
   id: string;
   name: string;
   level: number;
   affinity: string;
-  xp: number; 
-  completedQuestIds?: number[]; 
-  activeQuestId?: number | null; 
+  xp: number; // 1-100
   pictureUrl: string;
-  isOnActiveQuest: boolean;
+  completedQuestIds?: number[];
+  activeQuestId?: number | null;
+  activeQuest?: Quest | null;
 }
- 

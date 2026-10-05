@@ -16,6 +16,7 @@ interface CreateWizardInput {
 interface CreateTowerInput {
   email: string;
   passwordHash: string;
+  name: string;
 }
  
 @Injectable()
@@ -29,7 +30,7 @@ export class UsersService {
   findByEmailWithPassword(email: string): Promise<User | null> {
     return this.userRepo
       .createQueryBuilder("user")
-      .addSelect("user.password") // password column has select: false by default
+      .addSelect("user.password") 
       .where("user.email = :email", { email })
       .getOne();
   }
@@ -58,6 +59,7 @@ export class UsersService {
       email: input.email,
       password: input.passwordHash,
       role: UserRole.TOWER,
+      name: input.name,
       rank: "ADMIN",
     });
     return this.towerRepo.save(tower);
@@ -66,4 +68,4 @@ export class UsersService {
   findAll(): Promise<User[]> {
     return this.userRepo.find();
   }
-}
+} 

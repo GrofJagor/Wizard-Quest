@@ -4,7 +4,6 @@
   margin: 0 auto;
 }
 
-/* Hero Styling */
 .hero-section {
   text-align: center;
   padding: 4rem 1rem 3rem 1rem;
@@ -18,12 +17,13 @@
 }
 
 .hero-section h1 {
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 8vw, 3.5rem); 
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 4px;
   color: #c4a86b;
   text-shadow: 0px 0px 12px rgba(196, 168, 107, 0.3);
+  overflow-wrap: break-word;
 }
 
 .sparkle {
@@ -39,7 +39,6 @@
   margin-top: 0.5rem;
 }
 
-/* Recruitment Grid */
 .recruitment-hub {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -65,7 +64,6 @@
   border-color: rgba(196, 168, 107, 0.4);
 }
 
-/* Magic card gets a warm gold tint hint */
 .magic-path .card-glow {
   position: absolute;
   inset: 0;
@@ -73,7 +71,6 @@
   pointer-events: none;
 }
 
-/* Admin card gets a cold runic steel tint hint */
 .mundane-path .card-glow {
   position: absolute;
   inset: 0;
@@ -108,7 +105,6 @@
   color: rgba(217, 203, 168, 0.9);
 }
 
-/* Buttons */
 .btn {
   font-family: 'Cinzel', serif;
   padding: 0.8rem 1.5rem;
@@ -143,7 +139,6 @@
   box-shadow: 0 0 15px rgba(163, 177, 198, 0.4);
 }
 
-/* Quests Board */
 .quests-board {
   margin-top: 4rem;
 }
@@ -218,7 +213,6 @@
   font-style: normal;
 }
 
-/* Animations */
 @keyframes pulse {
   0%, 100% { opacity: 0.4; transform: scale(0.9); }
   50% { opacity: 1; transform: scale(1.1); }

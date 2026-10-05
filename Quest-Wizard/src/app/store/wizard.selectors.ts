@@ -18,8 +18,8 @@ export const selectWizardsError = createSelector(selectWizardState, (state) => s
 export const selectWizardById = (wizardId: string) =>
   createSelector(selectWizardsEntities, (entities) => entities[wizardId] ?? null);
  
-
 export const selectWizardsWithoutActiveQuest = createSelector(selectAllWizards, (wizards) =>
-  wizards.filter((w) => w.isOnActiveQuest === false)
+  wizards.filter((w) => w.activeQuestId === null || w.activeQuestId === undefined)
 );
+ 
  

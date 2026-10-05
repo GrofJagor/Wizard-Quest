@@ -1,8 +1,7 @@
 import { createEntityAdapter, EntityState } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
-
 import * as WizardActions from "./wizard.actions";
-import * as RelActions from "./quest-wizard.actions";
+import * as QuestActions from "./quest.actions";
 import { Wizard } from "../models/wizard";
 
 
@@ -21,19 +20,15 @@ export const initialState: WizardsState = wizardAdapter.getInitialState({
 export const wizardsReducer = createReducer(
   initialState,
  
- 
   on(WizardActions.loadWizards, (state) => ({ ...state, loading: true, error: null })),
- 
   on(WizardActions.loadWizardsSuccess, (state, { wizards }) =>
     wizardAdapter.setAll(wizards, { ...state, loading: false })
   ),
- 
   on(WizardActions.loadWizardsFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
- 
  
   on(WizardActions.loadWizardById, (state) => ({ ...state, loading: true, error: null })),
   on(WizardActions.loadWizardByIdSuccess, (state, { wizard }) =>
@@ -44,7 +39,6 @@ export const wizardsReducer = createReducer(
     loading: false,
     error,
   })),
- 
  
   on(WizardActions.loadWizardsWithoutActiveQuest, (state) => ({
     ...state,
@@ -59,7 +53,6 @@ export const wizardsReducer = createReducer(
     loading: false,
     error,
   })),
- 
  
   on(WizardActions.updateWizardProfile, (state) => ({ ...state, loading: true, error: null })),
   on(WizardActions.updateWizardProfileSuccess, (state, { wizard }) =>
@@ -80,42 +73,37 @@ export const wizardsReducer = createReducer(
     loading: false,
     error,
   })),
-
-  on(RelActions.joinQuestSuccess, (state, { quest, wizardId }) =>
+ 
+ 
+  on(QuestActions.joinQuestSuccess, (state, { quest, wizardId }) =>
     wizardAdapter.updateOne({ id: wizardId, changes: { activeQuestId: quest.id } }, state)
   ),
  
-
-  on(RelActions.assignActiveQuest, (state, { questId, wizard }) =>
-    wizardAdapter.updateOne({ id: wizard.id, changes: { activeQuestId: questId } }, state)
+  on(QuestActions.leaveQuestSuccess, (state, { wizardId }) =>
+    wizardAdapter.updateOne({ id: wizardId, changes: { activeQuestId: null } }, state)
   ),
  
-  on(RelActions.completeQuest, (state, { questId, wizard }) => {
-    const existing = state.entities[wizard.id];
-    if (!existing) return state;
- 
-    const completedQuestIds = existing.completedQuestIds ?? [];
- 
-    return wizardAdapter.updateOne(
-      {
-        id: wizard.id,
-        changes: {
-          activeQuestId: existing.activeQuestId === questId ? null : existing.activeQuestId,
-          completedQuestIds: completedQuestIds.includes(questId)
-            ? completedQuestIds
-            : [...completedQuestIds, questId],
-        },
-      },
-      state
-    );
-  }),
- 
-  on(RelActions.abandonActiveQuest, (state, { questId, wizard }) => {
-    const existing = state.entities[wizard.id];
-    if (!existing || existing.activeQuestId !== questId) return state;
- 
-    return wizardAdapter.updateOne({ id: wizard.id, changes: { activeQuestId: null } }, state);
-  })
+  on(QuestActions.concludeQuestSuccess, (state, { quest }) => {
+  if (!quest.completedByWizards || quest.completedByWizards.length === 0) {
+    return state;
+  }
+
+  const updates = quest.completedByWizards
+    .filter(wizard => {
+      const existing = state.entities[wizard.id];
+      return !!existing; 
+    })
+    .map(wizard => ({
+      id: wizard.id,
+      changes: {
+        activeQuestId: null,      
+        xp: wizard.xp,            
+        level: wizard.level       
+      }
+    }));
+
+  return wizardAdapter.updateMany(updates, state);
+})
 );
  
 export const {

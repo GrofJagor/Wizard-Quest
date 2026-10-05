@@ -6,9 +6,9 @@ import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors({
-    origin: "http://localhost:4200", 
+    origin: ['http://localhost', 'http://localhost:4200'],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", 
     credentials: true, 
   });
@@ -27,7 +27,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("docs", app, document);
 
-  // 5. Pokretanje aplikacije
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

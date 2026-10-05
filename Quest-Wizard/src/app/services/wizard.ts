@@ -8,39 +8,6 @@ import { environment } from '../../environments/environment';
 
  
 
-interface ApiQuestRef {
-  id: number;
-}
- 
-/** Raw shape returned by the backend — NOT the normalized store model. */
-interface ApiWizard {
-  id: string;
-  email: string;
-  name: string;
-  level: number;
-  affinity: string;
-  xp: number;
-  pictureUrl?: string | null;
-  activeQuest?: ApiQuestRef | null;
-  completedQuests?: ApiQuestRef[];
-  isOnActiveQuest: boolean
-}
- 
-/** Converts the backend's nested relation objects into ID references for the store. */
-function toWizardModel(api: ApiWizard): Wizard {
-  return {
-    id: api.id,
-    name: api.name,
-    level: api.level,
-    affinity: api.affinity,
-    xp: api.xp,
-    pictureUrl: api.pictureUrl ?? "",
-    activeQuestId: api.activeQuest?.id ?? null,
-    completedQuestIds: (api.completedQuests ?? []).map((q) => q.id),
-    isOnActiveQuest: api.isOnActiveQuest
-  };
-}
- 
 export interface UpdateWizardProfilePayload {
   name?: string;
   affinity?: string;
@@ -54,29 +21,27 @@ export class WizardService {
   private http = inject(HttpClient);
  
   getAll(): Observable<Wizard[]> {
-    return this.http
-      .get<ApiWizard[]>(`${environment.apiUrl}/wizards`)
-      .pipe(map((list) => list.map(toWizardModel)));
+    return this.http.get<Wizard[]>(`${environment.apiUrl}/wizards`);
   }
  
   getById(id: string): Observable<Wizard> {
-    return this.http.get<ApiWizard>(`${environment.apiUrl}/wizards/${id}`).pipe(map(toWizardModel));
+    return this.http.get<Wizard>(`${environment.apiUrl}/wizards/${id}`);
   }
  
-  /** PATCH /wizards/:id — backend enforces that a wizard may only edit their own profile (or a Tower may edit any). */
+  getWithoutActiveQuest(): Observable<Wizard[]> {
+    return this.http.get<Wizard[]>(`${environment.apiUrl}/wizards/without-active-quest`);
+  }
+
+  getAvailableForAssignment(): Observable<Wizard[]> {
+    return this.http.get<Wizard[]>(`${environment.apiUrl}/wizards/available-for-assignment`);
+  }
+ 
+
   updateProfile(id: string, payload: UpdateWizardProfilePayload): Observable<Wizard> {
-    return this.http
-      .patch<ApiWizard>(`${environment.apiUrl}/wizards/${id}`, payload)
-      .pipe(map(toWizardModel));
+    return this.http.patch<Wizard>(`${environment.apiUrl}/wizards/${id}`, payload);
   }
  
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/wizards/${id}`);
-  }
- 
-  getWithoutActiveQuest(): Observable<Wizard[]> {
-    return this.http
-      .get<ApiWizard[]>(`${environment.apiUrl}/wizards/without-active-quest`)
-      .pipe(map((list) => list.map(toWizardModel)));
   }
 }

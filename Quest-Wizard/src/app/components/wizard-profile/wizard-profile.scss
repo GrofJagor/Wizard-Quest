@@ -8,16 +8,30 @@
   --brass-bright: #e8cf8f;
   --ember-green: #4a7355;
   --ember-green-dim: #2f4a37;
+  --danger: #b5654f;
   --border-hairline: rgba(196, 168, 107, 0.35);
 
   font-family: "Cinzel", "Georgia", serif;
   color: var(--parchment);
 }
 
+.loading-state,
+.error-state {
+  text-align: center;
+  font-family: Georgia, serif;
+  font-style: italic;
+  padding: 2rem;
+  color: var(--parchment-dim);
+}
+
+.error-state {
+  color: #e8b3a0;
+}
+
 .grimoire-card {
   position: relative;
   max-width: 640px;
-  margin: 50px auto auto auto;
+  margin: 0 auto;
   padding: 2.5rem 2.25rem;
   background-color: var(--ink);
   background-image:
@@ -34,7 +48,6 @@
     inset 0 0 80px rgba(196, 168, 107, 0.04);
 }
 
-/* corner filigree ticks, in place of a generic drop shadow / rounded card */
 .frame-corner {
   position: absolute;
   width: 22px;
@@ -47,7 +60,7 @@
 .corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
 .corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
 
-.wizard-header {
+.profile-header {
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -66,6 +79,9 @@
     0 0 0 3px var(--ink),
     0 0 0 4px var(--border-hairline),
     0 0 18px rgba(196, 168, 107, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .portrait {
@@ -76,11 +92,19 @@
   display: block;
 }
 
-.identity {
-  min-width: 0;
+.tower-emblem {
+  background: rgba(196, 168, 107, 0.12);
+  color: var(--brass-bright);
+  font-size: 2rem;
+  font-weight: 600;
 }
 
-.wizard-name {
+.identity {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-name {
   margin: 0;
   font-size: 1.6rem;
   font-weight: 600;
@@ -89,7 +113,7 @@
   text-shadow: 0 0 14px rgba(232, 207, 143, 0.25);
 }
 
-.wizard-id {
+.profile-role-tag {
   margin: 0.2rem 0 0.75rem;
   font-family: Georgia, serif;
   font-size: 0.85rem;
@@ -122,9 +146,13 @@
   border-color: rgba(74, 115, 85, 0.4);
 }
 
+.rank-badge {
+  color: var(--brass-bright);
+  background: rgba(196, 168, 107, 0.1);
+}
+
 .xp-section {
   padding: 1.4rem 0;
-  border-bottom: 1px solid var(--border-hairline);
 }
 
 .xp-label {
@@ -151,74 +179,135 @@
   transition: width 0.4s ease;
 }
 
-.quest-section {
-  padding: 1.4rem 0;
+.edit-fields {
+  padding-top: 1.25rem;
 }
 
-.quest-section + .quest-section {
+.field-label {
+  display: block;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  color: var(--brass);
+  margin-bottom: 0.35rem;
+  margin-top: 1rem;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-hairline);
+  border-radius: 2px;
+  color: var(--parchment);
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 2px rgba(196, 168, 107, 0.15);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.arcane-button,
+.arcane-button-secondary,
+.edit-trigger {
+  padding: 0.6rem 1.1rem;
+  border-radius: 2px;
+  font-family: "Cinzel", "Georgia", serif;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.arcane-button {
+  background: linear-gradient(180deg, var(--brass-bright), var(--brass));
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: var(--ink-deep);
+}
+
+.arcane-button:hover {
+  filter: brightness(1.08);
+}
+
+.arcane-button-secondary {
+  background: transparent;
+  border: 1px solid var(--border-hairline);
+  color: var(--parchment-dim);
+}
+
+.arcane-button-secondary:hover {
+  border-color: var(--brass);
+  color: var(--brass-bright);
+}
+
+.create-quest-button {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.edit-trigger {
+  margin-top: 1.5rem;
+  background: transparent;
+  border: 1px solid var(--border-hairline);
+  color: var(--parchment-dim);
+  width: 100%;
+}
+
+.edit-trigger:hover {
+  border-color: var(--brass);
+  color: var(--brass-bright);
+}
+
+.active-quest-section {
+  padding: 1.4rem 0;
   border-top: 1px solid var(--border-hairline);
 }
 
 .section-title {
   margin: 0 0 0.75rem;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.03em;
   color: var(--brass);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
-.quest-count {
-  font-family: Georgia, serif;
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: var(--parchment-dim);
-}
-
-.active-quest {
+.active-quest-card {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: Georgia, serif;
-  font-size: 0.95rem;
-  padding: 0.6rem 0.8rem;
-  background: rgba(122, 74, 42, 0.12);
-  border: 1px solid rgba(196, 168, 107, 0.3);
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.8rem 1rem;
+  background: rgba(196, 168, 107, 0.07);
+  border: 1px solid var(--border-hairline);
   border-radius: 2px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.quest-icon {
+.active-quest-card:hover {
+  border-color: var(--brass);
+  background: rgba(196, 168, 107, 0.12);
+}
+
+.active-quest-title {
+  font-family: "Cinzel", "Georgia", serif;
+  font-size: 1rem;
   color: var(--brass-bright);
 }
 
-.quest-icon.done {
-  color: #a9c9af;
-}
-
-.quest-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.quest-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+.active-quest-meta {
   font-family: Georgia, serif;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   color: var(--parchment-dim);
-  padding: 0.35rem 0;
-  border-bottom: 1px dashed rgba(196, 168, 107, 0.15);
-}
-
-.quest-list li:last-child {
-  border-bottom: none;
 }
 
 .empty-note {
@@ -229,15 +318,140 @@
   margin: 0;
 }
 
+.completed-quests-section {
+  max-width: 900px;
+  margin: 2rem auto 0;
+}
+
+.board-title {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
 @media (max-width: 480px) {
   .grimoire-card {
     padding: 1.75rem 1.25rem;
   }
-  .wizard-header {
+  .profile-header {
     flex-direction: column;
     text-align: center;
   }
   .stat-row {
     justify-content: center;
   }
+}
+
+
+
+
+.quest-badges {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.active-quests-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.active-quest-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-hairline);
+  border-radius: 3px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    border-color: var(--brass);
+    background: rgba(196, 168, 107, 0.05);
+    transform: translateY(-1px);
+  }
+}
+
+.quest-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.active-quest-title {
+  font-family: "Cinzel", "Georgia", serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--brass-bright);
+}
+
+
+.level-badge,
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  font-size: 0.72rem;
+  font-family: "Cinzel", "Georgia", serif;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--border-hairline);
+  white-space: nowrap;
+}
+
+.level-easy {
+  color: #a9c9af;
+  background: rgba(74, 115, 85, 0.15);
+  border-color: rgba(74, 115, 85, 0.4);
+}
+
+.level-medium {
+  color: var(--brass-bright);
+  background: rgba(196, 168, 107, 0.12);
+  border-color: rgba(196, 168, 107, 0.35);
+}
+
+.level-hard {
+  color: #f0be8a;
+  background: rgba(184, 112, 45, 0.18);
+  border-color: rgba(184, 112, 45, 0.45);
+}
+
+.level-deadly {
+  color: #ff9e9e;
+  background: rgba(189, 42, 42, 0.22);
+  border-color: rgba(214, 75, 75, 0.55);
+  text-shadow: 0 0 4px rgba(255, 0, 0, 0.3);
+}
+
+
+.status-open {
+  color: var(--brass-bright);
+  background: rgba(196, 168, 107, 0.12);
+  border-color: rgba(196, 168, 107, 0.35);
+}
+
+.status-in-progress {
+  color: #f0be8a;
+  background: rgba(184, 112, 45, 0.18);
+  border-color: rgba(184, 112, 45, 0.45);
+}
+
+.status-completed {
+  color: #a9c9af;
+  background: rgba(74, 115, 85, 0.15);
+  border-color: rgba(74, 115, 85, 0.4);
+}
+.active-quest-meta {
+  font-family: Georgia, serif;
+  font-size: 0.82rem;
+  color: var(--parchment-dim);
+}
+
+.active-quest-meta::after {
+  color: var(--parchment-dim);
+  font-size: 0.9em;
 }

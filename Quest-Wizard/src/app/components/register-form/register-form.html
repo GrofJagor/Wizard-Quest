@@ -20,51 +20,29 @@
     </div>
 
     <label class="field-label" for="email">Email</label>
-    <input
-      id="email"
-      type="email"
-      class="field-input"
-      formControlName="email"
-      autocomplete="email"
-    />
+    <input id="email" type="email" class="field-input" formControlName="email" autocomplete="email" />
     <p class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
       A valid sigil (email) is required.
     </p>
 
     <label class="field-label" for="password">Password</label>
-    <input
-      id="password"
-      type="password"
-      class="field-input"
-      formControlName="password"
-      autocomplete="new-password"
-    />
-    <p
-      class="field-error"
-      *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
-    >
+    <input id="password" type="password" class="field-input" formControlName="password" autocomplete="new-password" />
+    <p class="field-error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
       Your incantation (password) must be at least 8 characters.
     </p>
 
-    <ng-container *ngIf="isWizard">
-      <label class="field-label" for="name">Wizard Name</label>
-      <input id="name" type="text" class="field-input" formControlName="name" />
-      <p class="field-error" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
-        Every wizard needs a name.
-      </p>
+    <label class="field-label" for="name">
+      {{ isWizard ? 'Wizard Name' : 'Tower Name' }}
+    </label>
+    <input id="name" type="text" class="field-input" formControlName="name" />
+    <p class="field-error" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+      {{ isWizard ? 'Every wizard needs a name.' : 'Every tower needs a designation name.' }}
+    </p>
 
+    <ng-container *ngIf="isWizard">
       <label class="field-label" for="affinity">Affinity</label>
-      <input
-        id="affinity"
-        type="text"
-        class="field-input"
-        formControlName="affinity"
-        placeholder="e.g. Verdant, Pyric, Umbral"
-      />
-      <p
-        class="field-error"
-        *ngIf="form.get('affinity')?.touched && form.get('affinity')?.invalid"
-      >
+      <input id="affinity" type="text" class="field-input" formControlName="affinity" placeholder="e.g. Verdant, Pyric, Umbral" />
+      <p class="field-error" *ngIf="form.get('affinity')?.touched && form.get('affinity')?.invalid">
         Choose your magical affinity.
       </p>
     </ng-container>

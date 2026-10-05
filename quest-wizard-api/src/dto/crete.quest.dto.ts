@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsInt, IsOptional, IsString, IsUUID, Min } from "class-validator";
+import { IsArray, IsBoolean, IsEnum, IsInt, IsOptional, IsString, IsUUID, Min } from "class-validator";
 import type{ QuestLevel } from "../entities/quest.entity.js";
 
  
@@ -24,10 +24,9 @@ export class CreateQuestDto {
   @IsOptional()
   @IsBoolean()
   open?: boolean;
- 
-  /** id of the Tower (admin) creating this quest */
+
   @IsOptional()
-  @IsUUID()
-  createdByTowerId?: string;
+  @IsArray()
+  assignedWizardIds?: string[];
 }
  

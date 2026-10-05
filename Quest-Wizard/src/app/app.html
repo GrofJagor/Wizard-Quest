@@ -1,14 +1,11 @@
+
 <app-navigation-bar></app-navigation-bar>
-
-<!-- <app-quest-board></app-quest-board>
-<app-quest-creation></app-quest-creation>
-<app-wizard-list [wizards]="[...(wizards | async) ?? []]"></app-wizard-list> -->
-<!-- <app-wizard-profile 
-  *ngFor="let wizard of wizards | async"
-  [wizard]="wizard">
-</app-wizard-profile> -->
-<!-- <app-quest-creation></app-quest-creation> -->
-
+<div class="main-content"> 
 <router-outlet />
+</div>
 
+<div class="global-notification" [class.show]="showNotification()">
+  <span class="notification-icon">⚠️</span>
+  <span class="notification-text">{{ notificationMessage() }}</span>
+</div>
 

@@ -1,9 +1,128 @@
-<p>quest works!</p>
-<!-- <div *ngIf="quest">
-    <span>{{quest.title}}</span>
-    <span>{{quest.level}}</span>
-    <span>{{quest.patron}}</span>
-    <span>{{quest.status}}</span>
-    <span>{{quest.wizards}}</span>
-
-</div> -->
+<ng-container *ngIf="quest$ | async as quest; else loadingOrMissing">
+  <section class="grimoire-card">
+    <div class="frame-corner corner-tl"></div>
+    <div class="frame-corner corner-tr"></div>
+    <div class="frame-corner corner-bl"></div>
+    <div class="frame-corner corner-br"></div>
+ 
+    <ng-container *ngIf="!editMode">
+      <header class="quest-header">
+        <h1 class="quest-title">{{ quest.title }}</h1>
+        <div class="badge-row">
+          <span class="level-badge" [class]="'level-' + quest.level.toLowerCase()">{{
+            quest.level
+          }}</span>
+          <span class="status-badge" [class]="'status-' + quest.status.toLowerCase()">{{
+            statusLabel(quest.status)
+          }}</span>
+        </div>
+      </header>
+ 
+      <p class="quest-patron">Commissioned by <strong>{{ quest.patron }}</strong></p>
+      <p class="quest-tower" *ngIf="quest.createdByTower">
+        Posted by the <strong>{{ quest.createdByTower.name }}</strong>
+      </p>
+ 
+      <p class="quest-description">{{ quest.description }}</p>
+ 
+      <div class="stat-grid">
+        <div class="stat-block">
+          <span class="stat-label">Reward</span>
+          <span class="stat-value">{{ quest.reward }} gp</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-label">Open to join</span>
+          <span class="stat-value">{{ quest.open ? "Yes" : "No" }}</span>
+        </div>
+      </div>
+ 
+      <div class="wizards-section">
+        <h2 class="section-title">Assigned Wizards</h2>
+        <ul class="wizard-list" *ngIf="quest.activeWizards.length > 0; else noWizards">
+          <li *ngFor="let w of quest.activeWizards">{{ w.name }} — Level {{ w.level }}</li>
+        </ul>
+        <ng-template #noWizards>
+          <p class="empty-note">No wizards have joined yet.</p>
+        </ng-template>
+      </div>
+ 
+      <div class="wizards-section" *ngIf="quest.completedByWizards.length > 0">
+        <h2 class="section-title">Completed By</h2>
+        <ul class="wizard-list">
+          <li *ngFor="let w of quest.completedByWizards">{{ w.name }}</li>
+        </ul>
+      </div>
+ 
+      <div class="action-row" *ngIf="isWizard()">
+        <button
+          *ngIf="!isAssigned(quest) && quest.status === 'OPEN'"
+          class="arcane-button"
+          (click)="join()"
+        >
+          Join Quest
+        </button>
+        <button
+          *ngIf="isAssigned(quest) && quest.status === 'OPEN'"
+          class="arcane-button-danger"
+          (click)="leave()"
+        >
+          Leave Quest
+        </button>
+      </div>
+ 
+      <div class="action-row" *ngIf="isOwningTower(quest)">
+        <button class="arcane-button-secondary" (click)="startEdit(quest)">Edit</button>
+        <button
+          *ngIf="quest.status === 'OPEN' && quest.activeWizards.length > 0"
+          class="arcane-button"
+          (click)="start()"
+        >
+          Start Quest
+        </button>
+        <button
+          *ngIf="quest.status === 'IN_PROGRESS'"
+          class="arcane-button"
+          (click)="conclude()"
+        >
+          Conclude Quest
+        </button>
+        <button class="arcane-button-danger" (click)="remove(quest)">Delete</button>
+      </div>
+    </ng-container>
+ 
+    <ng-container *ngIf="editMode">
+      <h1 class="quest-title">Edit Quest</h1>
+ 
+      <label class="field-label">Title</label>
+      <input class="field-input" [(ngModel)]="editForm.title" />
+ 
+      <label class="field-label">Difficulty</label>
+      <select class="field-input" [(ngModel)]="editForm.level">
+        <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
+      </select>
+ 
+      <label class="field-label">Patron</label>
+      <input class="field-input" [(ngModel)]="editForm.patron" />
+ 
+      <label class="field-label">Description</label>
+      <textarea class="field-input field-textarea" [(ngModel)]="editForm.description"></textarea>
+ 
+      <label class="field-label">Reward</label>
+      <input class="field-input" type="number" min="0" [(ngModel)]="editForm.reward" />
+ 
+      <label class="field-checkbox">
+        <input type="checkbox" [(ngModel)]="editForm.open" />
+        Open to join
+      </label>
+ 
+      <div class="action-row">
+        <button class="arcane-button" (click)="saveEdit()">Save</button>
+        <button class="arcane-button-secondary" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </ng-container>
+  </section>
+</ng-container>
+ 
+<ng-template #loadingOrMissing>
+  <div class="loading-state">Consulting the archives...</div>
+</ng-template>

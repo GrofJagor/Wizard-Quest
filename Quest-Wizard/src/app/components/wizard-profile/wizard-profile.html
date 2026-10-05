@@ -1,63 +1,162 @@
-<section class="grimoire-card" *ngIf="wizard1 | async as wizard">
-  <div class="frame-corner corner-tl"></div>
-  <div class="frame-corner corner-tr"></div>
-  <div class="frame-corner corner-bl"></div>
-  <div class="frame-corner corner-br"></div>
-
-  <header class="wizard-header">
-    <div class="portrait-frame">
-      <img
-        class="portrait"
-        [src]="wizard.pictureUrl"
-        [alt]="wizard.name + ' portrait'"
-      />
-    </div>
-
-    <div>
-      <h1 class="wizard-name">{{ wizard.name }}</h1>
-
-      <div class="stat-row">
-        <span class="stat-badge level-badge">Level {{ wizard.level }}</span>
-        <span class="stat-badge affinity-badge">{{ wizard.affinity }} Affinity</span>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="loading-state" *ngIf="vm.loading">Consulting the archives...</div>
+ 
+  <div class="error-state" *ngIf="vm.error">{{ vm.error }}</div>
+ 
+  <ng-container *ngIf="vm.profile as profile">
+    <section class="grimoire-card">
+    <div class="frame-corner corner-tl"></div>
+    <div class="frame-corner corner-tr"></div>
+    <div class="frame-corner corner-bl"></div>
+    <div class="frame-corner corner-br"></div>
+ 
+    <ng-container *ngIf="profile.role === 'WIZARD'">
+      <header class="profile-header">
+        <div class="portrait-frame" *ngIf="!editMode">
+          <img class="portrait" [src]="profile.pictureUrl" [alt]="profile.name" />
+        </div>
+ 
+        <div class="identity">
+          <ng-container *ngIf="!editMode; else wizardNameEdit">
+            <h1 class="profile-name">{{ profile.name }}</h1>
+          </ng-container>
+          <ng-template #wizardNameEdit>
+            <input class="edit-input" [(ngModel)]="wizardForm.name" placeholder="Wizard name" />
+          </ng-template>
+ 
+          <p class="profile-role-tag">Wizard</p>
+ 
+          <div class="stat-row" *ngIf="!editMode">
+            <span class="stat-badge level-badge">Level {{ profile.level }}</span>
+            <span class="stat-badge affinity-badge">{{ profile.affinity }} Affinity</span>
+          </div>
+        </div>
+      </header>
+ 
+      <div class="xp-section" *ngIf="!editMode">
+        <div class="xp-label">
+          <span>Arcane Mastery</span>
+          <span>{{ getXpClamped(profile.xp) }} / 100</span>
+        </div>
+        <div class="xp-track">
+          <div class="xp-fill" [style.width.%]="getXpClamped(profile.xp)"></div>
+        </div>
       </div>
-    </div>
-  </header>
+ 
+      <div class="active-quest-section" *ngIf="!editMode">
+        <h2 class="section-title">Active Quest</h2>
+        <ng-container *ngIf="activeQuest$ | async as activeQuest; else noActiveQuest">
+          <a class="active-quest-card" [routerLink]="['/quests', activeQuest.id]">
+            <span class="active-quest-title">{{ activeQuest.title }}</span>
+            <span class="active-quest-meta">
+              {{ activeQuest.level }} · {{ activeQuest.reward }} gp ·
+              {{ activeQuest.createdByTower?.name || "Unknown Tower" }}
+            </span>
+          </a>
+        </ng-container>
+        <ng-template #noActiveQuest>
+          <p class="empty-note">No active quest right now.</p>
+        </ng-template>
+      </div>
+ 
+      <div class="edit-fields" *ngIf="editMode">
+        <label class="field-label">Affinity</label>
+        <input class="edit-input" [(ngModel)]="wizardForm.affinity" />
+ 
+        <label class="field-label">Picture URL</label>
+        <input class="edit-input" [(ngModel)]="wizardForm.pictureUrl" />
+      </div>
+ 
+      <div class="edit-actions" *ngIf="editMode">
+        <button class="arcane-button" (click)="saveWizard(profile)">Save</button>
+        <button class="arcane-button-secondary" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </ng-container>
+ 
+    <ng-container *ngIf="profile.role === 'TOWER'">
+      <header class="profile-header">
+        <div class="portrait-frame tower-emblem" *ngIf="!editMode">
+          <span>T</span>
+        </div>
+ 
+        <div class="identity">
+          <ng-container *ngIf="!editMode; else towerNameEdit">
+            <h1 class="profile-name">{{ profile.name }}</h1>
+          </ng-container>
+          <ng-template #towerNameEdit>
+            <input class="edit-input" [(ngModel)]="towerForm.name" placeholder="Tower name" />
+          </ng-template>
+ 
+          <p class="profile-role-tag">Tower (Admin)</p>
+ 
+          <div class="stat-row" *ngIf="!editMode">
+            <span class="stat-badge rank-badge">{{ profile.rank }}</span>
+          </div>
+        </div>
+      </header>
+ 
+      <div class="edit-fields" *ngIf="editMode">
+        <label class="field-label">Rank</label>
+        <input class="edit-input" [(ngModel)]="towerForm.rank" />
+      </div>
+ 
+      <div class="edit-actions" *ngIf="editMode">
+        <button class="arcane-button" (click)="saveTower(profile)">Save</button>
+        <button class="arcane-button-secondary" (click)="cancelEdit()">Cancel</button>
+      </div>
 
-  <div class="xp-section">
-    <div class="xp-label">
-      <span>Arcane Mastery</span>
-      <span>{{ getXpClamped(wizard.xp) }} / 100</span>
-    </div>
-    <div class="xp-track">
-      <div class="xp-fill" [style.width.%]="getXpClamped(wizard.xp)"></div>
-    </div>
-  </div>
 
-  <div class="quest-section">
-    <h2 class="section-title">Active Quest</h2>
-    <div class="active-quest" *ngIf="wizard.activeQuestId; else noQuest">
-      <span class="quest-icon">✦</span>
-      <span>{{ wizard.activeQuestId }}</span>
-    </div>
-    <ng-template #noQuest>
-      <p class="empty-note">No quest bound to this wizard's fate right now.</p>
-    </ng-template>
-  </div>
+    <div class="active-quest-section" *ngIf="!editMode">
+      <h2 class="section-title">Active Quests &amp; Progress</h2>
+      <ng-container *ngIf="towerActiveQuests$ | async as towerQuests">
+        <ng-container *ngIf="towerQuests.length > 0; else noTowerActiveQuests">
+          <div class="active-quests-grid">
+            <a *ngFor="let quest of towerQuests" class="active-quest-card" [routerLink]="['/quests', quest.id]">
+              <div class="quest-card-top">
+                <span class="active-quest-title">{{ quest.title }}</span>
+                <div class="quest-badges">
+                  <span class="level-badge" [ngClass]="levelClass(quest.level)">{{ quest.level }}</span>
+                  <span class="status-badge" [ngClass]="statusClass(quest.status)">
+                    {{ statusLabel(quest.status) }}
+                  </span>
+                </div>
+              </div>
+              <span class="active-quest-meta">
+                {{ quest.reward }} gp
+              </span>
+            </a>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-template #noTowerActiveQuests>
+    <p class="empty-note">No active quests right now.</p>
+  </ng-template>
+</div>
+      
+      <button
+          class="arcane-button create-quest-button"
+          *ngIf="vm.canEdit && !editMode"
+          [routerLink]="['/quests/new']"
+        >
+          Create Quest
+        </button>
+    </ng-container>
 
-  <div class="quest-section">
-    <h2 class="section-title">
-      Completed Quests
-      <span class="quest-count" *ngIf="wizard.completedQuestIds">{{ wizard.completedQuestIds.length }}</span>
+    <button class="edit-trigger" *ngIf="vm.canEdit && !editMode" (click)="startEdit(profile)">
+      Edit Profile
+    </button>
+    </section>
+ 
+  <section class="completed-quests-section" *ngIf="!editMode">
+    <h2 class="section-title board-title">
+      {{ profile.role === "WIZARD" ? "Completed Quests" : "Quests Concluded by this Tower" }}
     </h2>
-
-    <ul class="quest-list" *ngIf="wizard.completedQuestIds; else noCompleted">
-      <li *ngFor="let quest of wizard.completedQuestIds">
-        <span class="quest-icon done">✓</span>
-        <span>{{ quest }}</span>
-      </li>
-    </ul>
-    <ng-template #noCompleted>
-      <p class="empty-note">The pages of this chronicle are still blank.</p>
-    </ng-template>
-  </div>
-</section>
+    <app-quest-board
+      [quests]="completedQuests$ | async"
+      [interactive]="false"
+      wizardsDisplay="completed"
+      [hideWizardsColumn]="profile.role === 'WIZARD'"
+    ></app-quest-board>
+  </section>
+  </ng-container>
+</ng-container>

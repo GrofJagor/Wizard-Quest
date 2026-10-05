@@ -20,32 +20,25 @@ export const initialState: QuestsState = questAdapter.getInitialState({
 export const questsReducer = createReducer(
   initialState,
  
- 
   on(QuestActions.loadQuests, (state) => ({ ...state, loading: true, error: null })),
- 
   on(QuestActions.loadQuestsSuccess, (state, { quests }) =>
     questAdapter.setAll(quests, { ...state, loading: false })
   ),
- 
   on(QuestActions.loadQuestsFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
  
- 
   on(QuestActions.loadQuestById, (state) => ({ ...state, loading: true, error: null })),
- 
   on(QuestActions.loadQuestByIdSuccess, (state, { quest }) =>
     questAdapter.upsertOne(quest, { ...state, loading: false })
   ),
- 
   on(QuestActions.loadQuestByIdFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
- 
  
   on(QuestActions.loadQuestsByStatus, (state) => ({ ...state, loading: true, error: null })),
   on(QuestActions.loadQuestsByStatusSuccess, (state, { quests }) =>
@@ -85,7 +78,6 @@ export const questsReducer = createReducer(
     error,
   })),
  
- 
   on(QuestActions.createQuest, (state) => ({ ...state, loading: true, error: null })),
   on(QuestActions.createQuestSuccess, (state, { quest }) =>
     questAdapter.addOne(quest, { ...state, loading: false })
@@ -95,7 +87,6 @@ export const questsReducer = createReducer(
     loading: false,
     error,
   })),
- 
  
   on(QuestActions.updateQuest, (state) => ({ ...state, loading: true, error: null })),
   on(QuestActions.updateQuestSuccess, (state, { quest }) =>
@@ -107,8 +98,6 @@ export const questsReducer = createReducer(
     error,
   })),
  
-
- 
   on(QuestActions.deleteQuest, (state) => ({ ...state, loading: true, error: null })),
   on(QuestActions.deleteQuestSuccess, (state, { id }) =>
     questAdapter.removeOne(id, { ...state, loading: false })
@@ -119,70 +108,66 @@ export const questsReducer = createReducer(
     error,
   })),
  
+  on(QuestActions.joinQuest, (state) => ({ ...state, loading: true, error: null })),
+  on(QuestActions.joinQuestSuccess, (state, { quest }) => {
+    const currentWizardId = quest.activeWizards[quest.activeWizards.length - 1]?.id;
 
-  on(RelActions.joinQuest, (state) => ({ ...state, loading: true, error: null })),
-  on(RelActions.joinQuestSuccess, (state, { quest }) =>
-    questAdapter.upsertOne(quest, { ...state, loading: false })
-  ),
-  on(RelActions.joinQuestFailure, (state, { error }) => ({
+    if (!currentWizardId) {
+      return questAdapter.upsertOne(quest, { ...state, loading: false });
+    }
+    const stateWithClearedOldQuests = questAdapter.map((existingQuest) => {
+      if (existingQuest.id === quest.id) {
+        return existingQuest;
+      }
+
+      const isWizardInThisQuest = existingQuest.activeWizards.some(w => w.id === currentWizardId);
+      if (isWizardInThisQuest) {
+        return {
+          ...existingQuest,
+          activeWizards: existingQuest.activeWizards.filter(w => w.id !== currentWizardId)
+        };
+      }
+
+      return existingQuest;
+    }, state);
+
+    return questAdapter.upsertOne(quest, { ...stateWithClearedOldQuests, loading: false });
+  }),
+  on(QuestActions.joinQuestFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
  
-
+  on(QuestActions.leaveQuest, (state) => ({ ...state, loading: true, error: null })),
+  on(QuestActions.leaveQuestSuccess, (state, { quest }) =>
+    questAdapter.upsertOne(quest, { ...state, loading: false })
+  ),
+  on(QuestActions.leaveQuestFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
  
-  on(RelActions.assignActiveQuest, (state, { questId, wizard }) => {
-    const quest = state.entities[questId];
-    if (!quest) return state;
+  on(QuestActions.startQuest, (state) => ({ ...state, loading: true, error: null })),
+  on(QuestActions.startQuestSuccess, (state, { quest }) =>
+    questAdapter.upsertOne(quest, { ...state, loading: false })
+  ),
+  on(QuestActions.startQuestFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
  
-    const alreadyActive = quest.activeWizards.some((w) => w.id === wizard.id);
- 
-    return questAdapter.updateOne(
-      {
-        id: questId,
-        changes: {
-          activeWizards: alreadyActive ? quest.activeWizards : [...quest.activeWizards, wizard],
-        },
-      },
-      state
-    );
-  }),
- 
-  on(RelActions.completeQuest, (state, { questId, wizard }) => {
-    const quest = state.entities[questId];
-    if (!quest) return state;
- 
-    const alreadyCompleted = quest.completedByWizards.some((w) => w.id === wizard.id);
- 
-    return questAdapter.updateOne(
-      {
-        id: questId,
-        changes: {
-          activeWizards: quest.activeWizards.filter((w) => w.id !== wizard.id),
-          completedByWizards: alreadyCompleted
-            ? quest.completedByWizards
-            : [...quest.completedByWizards, wizard],
-        },
-      },
-      state
-    );
-  }),
- 
-  on(RelActions.abandonActiveQuest, (state, { questId, wizard }) => {
-    const quest = state.entities[questId];
-    if (!quest) return state;
- 
-    return questAdapter.updateOne(
-      {
-        id: questId,
-        changes: {
-          activeWizards: quest.activeWizards.filter((w) => w.id !== wizard.id),
-        },
-      },
-      state
-    );
-  })
+  on(QuestActions.concludeQuest, (state) => ({ ...state, loading: true, error: null })),
+  on(QuestActions.concludeQuestSuccess, (state, { quest }) =>
+    questAdapter.upsertOne(quest, { ...state, loading: false })
+  ),
+  on(QuestActions.concludeQuestFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  }))
 );
  
 export const {
@@ -191,4 +176,3 @@ export const {
   selectIds: selectQuestIds,
   selectTotal: selectQuestTotal,
 } = questAdapter.getSelectors();
- 

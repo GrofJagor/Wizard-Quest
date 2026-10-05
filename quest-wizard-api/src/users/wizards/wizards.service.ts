@@ -3,23 +3,27 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Wizard } from '../../entities/wizard.entity.js';
 import { IsNull, Repository } from 'typeorm';
 import { UpdateWizardProfileDto } from '../../dto/update.wizard.profile.dto.js';
-@Injectable()
 
+@Injectable()
 export class WizardsService {
   constructor(@InjectRepository(Wizard) private readonly wizardRepo: Repository<Wizard>) {}
-
   findAll(): Promise<Wizard[]> {
-    return this.wizardRepo.find();
+    return this.wizardRepo.find({ relations: { activeQuest: true, completedQuests: true } });
   }
  
   async findOne(id: string): Promise<Wizard> {
-    const wizard = await this.wizardRepo.findOne({ where: { id } });
+    const wizard = await this.wizardRepo.findOne({
+      where: { id },
+      relations: {
+        activeQuest: { createdByTower: true, activeWizards: true },
+        completedQuests: true,
+      },
+    });
     if (!wizard) {
       throw new NotFoundException(`Wizard ${id} not found`);
     }
     return wizard;
   }
- 
 
   async updateProfile(id: string, dto: UpdateWizardProfileDto): Promise<Wizard> {
     const wizard = await this.findOne(id);
@@ -34,32 +38,27 @@ export class WizardsService {
  
     return this.wizardRepo.save(wizard);
   }
- 
+
   async remove(id: string): Promise<void> {
     const result = await this.wizardRepo.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Wizard ${id} not found`);
     }
   }
- 
-
+  
   findWizardsWithNoActiveQuest(): Promise<Wizard[]> {
-    return this.wizardRepo.find({ where: { activeQuest: IsNull() } });
+    return this.wizardRepo.find({
+      where: { activeQuest: IsNull() },
+      relations: { completedQuests: true },
+    });
   }
-}
 
-// async findWizardsWithNoActiveQuest(): Promise<WizardActiveQuestDto[]> {
-//      const wizard = await this.wizardRepo.find({ where: { activeQuest: IsNull() } });
- 
-//     const wizards: WizardActiveQuestDto[] = wizard.map(wizard => ({
-//     name: wizard.name,
-//     level: wizard.level,
-//     affinity: wizard.affinity,
-//     xp: wizard.xp, // 1-100
-//     pictureUrl: wizard.pictureUrl,
-//     activeQuest: wizard.activeQuest?.id || null,
-//   }));
- 
-//     return wizards;
-//   }
-// }
+  findAvailableForAssignment(): Promise<Wizard[]> {
+    return this.wizardRepo
+      .createQueryBuilder("wizard")
+      .leftJoinAndSelect("wizard.activeQuest", "activeQuest")
+      .where("activeQuest.id IS NULL")
+      .getMany();
+  }
+
+}

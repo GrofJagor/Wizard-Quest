@@ -1,116 +1,109 @@
-<!-- <app-quest-details></app-quest-details>
-<p>quest-board works!</p>
-<div class="table-container">
-  <table class="rpg-table">
+<div class="board-search-container">
+  <input 
+    type="text" 
+    class="quest-search-input" 
+    placeholder="Search quests by title or tower..." 
+    (input)="onSearchChange($event)"
+  />
+</div>
+
+<div class="board-wrap">
+  <table class="quest-board">
     <thead>
       <tr>
-        <th>Kvest</th>
-        <th>Težina</th>
-        <th>Nagrada</th>
+        <th (click)="onSort('tower')" [ngClass]="{'active-sort': sortColumn$.value === 'tower'}" class="sortable-header">
+          Tower <span class="sort-indicator">{{ getSortIndicator('tower') }}</span>
+        </th>
+        <th (click)="onSort('title')" [ngClass]="{'active-sort': sortColumn$.value === 'title'}" class="sortable-header">
+          Quest <span class="sort-indicator">{{ getSortIndicator('title') }}</span>
+        </th>
+        <th (click)="onSort('level')" [ngClass]="{'active-sort': sortColumn$.value === 'level'}" class="sortable-header">
+          Difficulty <span class="sort-indicator">{{ getSortIndicator('level') }}</span>
+        </th>
+        <th (click)="onSort('reward')" [ngClass]="{'active-sort': sortColumn$.value === 'reward'}" class="sortable-header">
+          Reward <span class="sort-indicator">{{ getSortIndicator('reward') }}</span>
+        </th>
+        <th *ngIf="showWizardsColumn" (click)="onSort('wizards')" [ngClass]="{'active-sort': sortColumn$.value === 'wizards'}" class="sortable-header">
+          {{ wizardsColumnHeader() }} <span class="sort-indicator">{{ getSortIndicator('wizards') }}</span>
+        </th>
+        <th (click)="onSort('status')" [ngClass]="{'active-sort': sortColumn$.value === 'status'}" class="sortable-header">
+          Status <span class="sort-indicator">{{ getSortIndicator('status') }}</span>
+        </th>
+        <th *ngIf="interactive" class="actions-header"></th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Zmajevo gnezdo</td>
-        <td><span class="danger">Legendarno</span></td>
-        <td>500 🪙</td>
-      </tr>
-      <tr>
-        <td>Izgubljeni artefakt</td>
-        <td><span class="rare">Retko</span></td>
-        <td>150 🪙</td>
-      </tr>
-      <tr>
-        <td>Čišćenje podruma</td>
-        <td>Obično</td>
-        <td>10 🪙</td>
-      </tr>
-    </tbody>
-  </table>
-</div> -->
-
-<!-- 
-<ul *ngFor="let quest of quests | async">
-  <app-quest-details></app-quest-details> 
-   {{quest.title}}
-</ul> -->
-
-
-<div class="table-container">
-  <table class="rpg-table">
-    <thead>
-      <tr>
-        <!-- <th>ID</th> -->
-        <th>Quest Title</th>
-        <th>Difficulty</th>
-        <th>Patron</th>
-        <th>Description</th>
-        <th>Assigned Wizards</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Angular prolazi kroz kvestove i pravi po jedan red (tr) za svaki kvest -->
-      <tr *ngFor="let quest of quests | async">
-        <!-- <td>{{ quest.id }}</td> -->
-        
-        <!-- Naslov kvesta -->
-        <td style="font-weight: bold; color: #ffd700;">{{ quest.title }}</td>
-        
-        <!-- Težina kvesta sa tvojim specijalnim CSS klasama -->
+      <tr *ngFor="let quest of displayQuests$ | async" 
+          class="quest-row" 
+          (click)="onMoreInfo(quest, $event)">
+          
+        <td class="tower-cell">{{ quest.createdByTower?.name || "—" }}</td>
+        <td class="title-cell">{{ quest.title }}</td>
         <td>
-          <span [ngClass]="{
-            'easy': quest.level === 'EASY',
-            'medium': quest.level === 'MEDIUM',
-            'hard': quest.level === 'HARD',
-            'deadly': quest.level === 'DEADLY'
-          }">
-            {{ quest.level }}
+          <span class="level-badge" [ngClass]="levelClass(quest.level)">{{ quest.level }}</span>
+        </td>
+        <td class="reward-cell">{{ quest.reward }}</td>
+
+        <td *ngIf="showWizardsColumn" class="wizards-cell">
+          <span *ngIf="wizardsColumnList(quest).length === 0" class="empty-note">None yet</span>
+          <span *ngFor="let w of wizardsColumnList(quest); let last = last" class="wizard-chip">
+            {{ w.name }}<span *ngIf="!last">, </span>
           </span>
         </td>
-        
-        <!-- Patron -->
-        <td>{{ quest.patron }}</td>
-        
-        <!-- Opis -->
-        <td style="font-style: italic; font-size: 0.9rem; max-width: 300px;">
-          {{ quest.description }}
-        </td>
-        
-        <!-- Lista čarobnjaka složena u jedan red razdvojen zarezima -->
+
         <td>
-          <span *ngFor="let wizard of quest.activeWizards; let last = last">
-            {{ wizard.name }}{{ !last ? ', ' : '' }}
+          <span class="status-badge" [ngClass]="statusClass(quest.status)">
+            {{ statusLabel(quest.status) }}
           </span>
         </td>
-        
-        <!-- Status -->
-        <td>
-          <span style="letter-spacing: 1px; font-weight: bold;">
-            {{ quest.status }}
-          </span>
+
+        <td *ngIf="interactive" class="actions-cell">
+          <div class="quest-actions" (click)="$event.stopPropagation()">
+            <ng-container *ngIf="isWizardView">
+              <button
+                *ngIf="!isAssigned(quest) && quest.status === 'OPEN'"
+                class="action-btn join-btn"
+                (click)="onJoin(quest, $event)"
+              >
+                Join
+              </button>
+              <button class="action-btn" (click)="onMoreInfo(quest, $event)">More Info</button>
+              <button
+                *ngIf="isAssigned(quest) && quest.status === 'OPEN'"
+                class="action-btn leave-btn"
+                (click)="onLeave(quest, $event)"
+              >
+                Leave
+              </button>
+            </ng-container>
+
+            <ng-container *ngIf="isTowerView">
+              <button class="action-btn" (click)="onEdit(quest, $event)">Edit</button>
+              <button
+                *ngIf="quest.status === 'OPEN' && quest.activeWizards.length > 0"
+                class="action-btn start-btn"
+                (click)="onStart(quest, $event)"
+              >
+                Start
+              </button>
+              <button
+                *ngIf="quest.status === 'IN_PROGRESS'"
+                class="action-btn conclude-btn"
+                (click)="onConclude(quest, $event)"
+              >
+                Conclude
+              </button>
+              <button class="action-btn delete-btn" (click)="onDelete(quest, $event)">
+                Delete
+              </button>
+            </ng-container>
+          </div>
         </td>
+      </tr>
+
+      <tr *ngIf="(displayQuests$ | async)?.length === 0">
+        <td [attr.colspan]="calculateColspan()" class="empty-row">No quests to display.</td>
       </tr>
     </tbody>
   </table>
 </div>
-
-
-<!-- <div *ngIf="loading$ | async" class="loading">
-  Loading quests...
-</div>
-
-<div *ngIf="error$ | async as error" class="error">
-  {{ error }}
-</div>
-
-<ul *ngIf="!(loading$ | async) && !(error$ | async)">
-  <li *ngFor="let quest of quests$ | async;">
-    {{ quest.title }}
-
-  </li>
-</ul>
-
-<div *ngIf="(quests$ | async)?.length === 0 && !(loading$ | async)">
-  No quests found.
-</div> -->

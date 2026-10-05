@@ -8,7 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Wizard]),
-    PassportModule.register({ defaultStrategy: "jwt" }), // needed for JwtAuthGuard/RolesGuard in this module's controller
+    PassportModule.register({ defaultStrategy: "jwt" }),
   ],
   providers: [WizardsService],
   controllers: [WizardsController],

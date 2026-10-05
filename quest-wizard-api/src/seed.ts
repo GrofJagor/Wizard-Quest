@@ -10,7 +10,7 @@ import { Wizard } from "./entities/wizard.entity.js";
 import { Tower } from "./entities/tower.entity.js";
 import { Quest, QuestLevel } from "./entities/quest.entity.js";
 
- const SEED_PASSWORD = "Password123!";
+const SEED_PASSWORD = "Password123!";
  
 async function seed() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -25,13 +25,14 @@ async function seed() {
   await userRepo.query("DELETE FROM wizard_completed_quests");
   await userRepo.query("UPDATE users SET activeQuestId = NULL");
   
-  // POPRAVLJENO: Umesto .delete({}) koristimo sirovi SQL DELETE da TypeORM ne baci grešku
   await userRepo.query("DELETE FROM users");
   await questRepo.query("DELETE FROM quests");
   
   const passwordHash = await bcrypt.hash(SEED_PASSWORD, 10);
+  
   console.log("Seeding tower (admin)...");
   const admin = towerRepo.create({
+    id: "a1b2c3d4-e5f6-47a8-b9c0-123456789abc", // Eksplicitan validan UUID v4 za admina
     name: "Eastern Tower",
     email: "admin@wizardtower.dev",
     password: passwordHash,
@@ -64,7 +65,7 @@ async function seed() {
       createdByTower: admin
     }),
     questRepo.create({
-      title: "Escort the Alchemist to Brindlewatch",
+      title: "Escort the Alchemist to Brindle",
       level: "EASY" as QuestLevel,
       patron: "Alchemist Fenn",
       description: "Safe passage needed through bandit territory.",
@@ -87,7 +88,8 @@ async function seed() {
   
   console.log("Seeding wizards...");
   
-  const elowen = wizardRepo.create({
+  const gandalf = wizardRepo.create({
+    id: "0c43bf29-96ba-4111-a924-b42e99f226b5", 
     email: "Gandalf@wizardtower.dev",
     password: passwordHash,
     role: UserRole.WIZARD,
@@ -102,6 +104,7 @@ async function seed() {
   });
  
   const darius = wizardRepo.create({
+    id: "b2c3d4e5-f6a7-48b9-c0d1-23456789abcd",
     email: "darius@wizardtower.dev",
     password: passwordHash,
     role: UserRole.WIZARD,
@@ -109,13 +112,14 @@ async function seed() {
     level: 7,
     affinity: "Pyric",
     xp: 34,
-    pictureUrl: "https://example.com/darius.jpg",
+    pictureUrl: "https://images.stockcake.com/public/b/d/e/bde52b26-da70-45e2-bbae-2f696056ec8d_large/mystical-fire-wizard-stockcake.jpg",
     completedQuests: [escort],
     activeQuest: hollowKing,
     isOnActiveQuest: true,
   });
  
   const nym = wizardRepo.create({
+    id: "c3d4e5f6-a7b8-49c0-d1e2-3456789abcde",
     email: "nym@wizardtower.dev",
     password: passwordHash,
     role: UserRole.WIZARD,
@@ -123,22 +127,18 @@ async function seed() {
     level: 3,
     affinity: "Umbral",
     xp: 12,
-    pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/e/ea/GANDALF.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+    pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/e/ea/GANDALF.jpg",
     completedQuests: [],
     activeQuest: null,
-    isOnActiveQuest:false,
+    isOnActiveQuest: false,
   });
  
-  await wizardRepo.save([elowen, darius, nym]);
- 
+  await wizardRepo.save([gandalf, darius, nym]);
   await towerRepo.save(admin);
  
   console.log("\nSeed complete.");
   console.log(`All seeded accounts use the password: ${SEED_PASSWORD}`);
-  console.log("- elowen@wizardtower.dev (wizard, has an active + completed quests)");
-  console.log("- darius@wizardtower.dev (wizard, has an active + completed quest)");
-  console.log("- nym@wizardtower.dev    (wizard, fresh — no quests yet)");
-  console.log("- admin@wizardtower.dev  (tower / admin)");
+  console.log("- Gandalf@wizardtower.dev ID: 0c43bf29-96ba-4111-a924-b42e99f226b5");
  
   await app.close();
 }

@@ -29,12 +29,13 @@ export class AuthService {
         ? await this.usersService.createWizard({
             email: dto.email,
             passwordHash,
-            name: dto.name!,
+            name: dto.name,
             affinity: dto.affinity!,
           })
         : await this.usersService.createTower({
             email: dto.email,
             passwordHash,
+            name: dto.name,
           });
  
     return this.buildAuthResponse(user);

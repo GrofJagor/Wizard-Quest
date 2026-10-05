@@ -56,12 +56,10 @@ export class AuthService {
     this.fetchProfile().subscribe();
   }
 
-  /** Fetches the full profile via GET /users/me (needs the auth interceptor to attach the token). */
   private fetchProfile(): Observable<CurrentUserProfile | null> {
     return this.http.get<CurrentUserProfile>(`${environment.apiUrl}/users/me`).pipe(
       tap((profile) => this.currentUserSubject.next(profile)),
       catchError(() => {
-        // Token expired/invalid — clear it so we don't keep retrying.
         localStorage.removeItem(AUTH_TOKEN_KEY);
         this.currentUserSubject.next(null);
         return of(null);

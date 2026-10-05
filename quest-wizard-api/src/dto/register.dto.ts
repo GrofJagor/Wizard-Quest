@@ -13,13 +13,12 @@ export class RegisterDto {
   @IsEnum(UserRole)
   role: UserRole;
  
-  // required only when role === WIZARD
-  @ValidateIf((dto) => dto.role === UserRole.WIZARD)
   @IsString()
-  name?: string;
+  name: string;
  
   @ValidateIf((dto) => dto.role === UserRole.WIZARD)
   @IsString()
   affinity?: string;
 }
+ 
  

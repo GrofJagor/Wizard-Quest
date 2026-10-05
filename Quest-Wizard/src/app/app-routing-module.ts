@@ -7,16 +7,32 @@ import { WizardList } from './components/wizard-list/wizard-list';
 import { HomePage } from './components/home-page/home-page';
 import { WizardProfile } from './components/wizard-profile/wizard-profile';
 import { WizardBoard } from './components/wizard-board/wizard-board';
+import { QuestDetails } from './components/quest-details/quest-details';
+import { authGuard, homeGuard, towerGuard } from './auth.guard';
+import { QuestCreation } from './components/quest-creation/quest-creation';
 
 const routes: Routes = [
-  {path: 'login', component:LoginForm},
-  {path: 'register', component:RegisterForm},
-  {path: 'quests', component:QuestBoard},
-  {path: 'wizards', component:WizardBoard},
-  {path: '', component:HomePage},
-  {path: 'register/:user', component:RegisterForm},
-  {path: 'profile/:user', component:WizardProfile},
+  { 
+    path: '', 
+    component: HomePage, 
+    pathMatch: 'full', 
+    canActivate: [homeGuard]
+  },
+  
+  { path: 'login', component: LoginForm },
+  { path: 'register', component: RegisterForm },
+  { path: 'register/:user', component: RegisterForm },
+  { path: 'quests/new', component:QuestCreation, canActivate: [towerGuard]},
+  { path: 'quests', component: QuestBoard },
+  { path: 'quests/:id', component: QuestDetails },
+  { path: 'wizards', component: WizardBoard },
+  { path: 'profile/:user', component: WizardProfile },
+
+  { path: '**', redirectTo: '' },
 ];
+
+
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

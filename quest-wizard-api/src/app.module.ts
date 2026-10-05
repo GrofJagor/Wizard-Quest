@@ -11,6 +11,7 @@ import { UsersModule } from './users/users/users.module.js';
 import { AuthModule } from './auth/auth/auth.module.js';
 import { QuestsModule } from './quests/quests/quests.module.js';
 import { WizardsModule } from './users/wizards/wizards.module.js';
+import { TowersModule } from './towers/towers/towers.module.js';
 
 
 @Module({
@@ -37,6 +38,7 @@ import { WizardsModule } from './users/wizards/wizards.module.js';
     AuthModule,
     QuestsModule,
     WizardsModule,
+    TowersModule,
   ],
 })
 export class AppModule {}

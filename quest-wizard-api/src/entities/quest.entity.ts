@@ -36,7 +36,6 @@ export class Quest {
   @Column({ type: "nvarchar", length: 50, default: "OPEN" })
   status: QuestStatus;
 
-  // U SQL Serveru se boolean mapira kao 'bit' tip podatka
   @Column({ type: "bit", default: true })
   open: boolean;
 

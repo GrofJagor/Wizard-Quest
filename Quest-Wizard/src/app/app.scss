@@ -1,0 +1,40 @@
+.main-content{
+    padding-top: 80px;
+}
+
+.global-notification {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #0a0e17; // --ink-deep equivalent
+  border: 1px solid #b5654f; // --danger equivalent
+  color: #d98b73; // --danger-bright equivalent
+  padding: 0.75rem 1.1rem;
+  border-radius: 4px;
+  font-family: "Cinzel", "Georgia", serif;
+  font-size: 0.85rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  z-index: 9999; /* Ensures it floats above modals, toolbars, and cards */
+  
+  opacity: 0;
+  transform: translateY(15px);
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .notification-icon {
+    font-size: 1rem;
+  }
+
+  .notification-text {
+    letter-spacing: 0.02em;
+  }
+}

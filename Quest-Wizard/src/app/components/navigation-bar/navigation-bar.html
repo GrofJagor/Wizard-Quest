@@ -1,12 +1,9 @@
-<p>Navigation bar works!<p>
 <nav class="navbar">
   <div class="navbar-container">
-    <!-- Logo / Brand -->
     <a routerLink="/" class="navbar-logo">
       <span><fa-icon [icon]="wizardHatIcon" style="color: #6f42c1;"></fa-icon>Quest</span>Wizard
     </a>
 
-    <!-- Hamburger Menu Icon for Mobile -->
     <button
       class="menu-toggle"
       (click)="toggleMenu()"
@@ -18,7 +15,6 @@
       <span class="bar" [class.open]="isMenuOpen"></span>
     </button>
 
-    <!-- Navigation Links -->
     <ul class="nav-menu" [class.active]="isMenuOpen">
       <li class="nav-item">
         <a
@@ -40,7 +36,6 @@
         <a href= "https://www.reddit.com/r/wizardposting/" routerLinkActive="active" (click)="closeMenu()">Social <fa-icon [icon]="redditIcon"></fa-icon></a>
       </li>
 
-      <!-- Signed in: avatar + logout -->
       <ng-container *ngIf="authService.currentUser$ | async as user; else guestLinks">
         <li class="nav-item user-item">
           <a class="nav-item user-item" routerLink="/profile/{{user.id}}" routerLinkActive="active" (click)="closeMenu()">
@@ -61,7 +56,6 @@
         </li>
       </ng-container>
 
-      <!-- Signed out: login + register -->
       <ng-template #guestLinks>
         <li class="nav-item">
           <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Login</a>

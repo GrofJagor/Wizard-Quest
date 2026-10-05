@@ -1,146 +1,180 @@
 :host {
-  --ink: #2b2118;
-  --parchment: #efe4c3;
-  --parchment-dark: #d8c99a;
-  --forest: #2f4030;
-  --forest-dark: #223026;
-  --gold: #a9822f;
-  --error: #8c3b2f;
-
   display: block;
-  max-width: 30rem;
-  margin: 0 auto;
-  font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  color: var(--ink);
+  --ink: #0f1420;
+  --ink-deep: #0a0e17;
+  --parchment: #d9cba8;
+  --parchment-dim: #a89870;
+  --brass: #c4a86b;
+  --brass-bright: #e8cf8f;
+  --ember-green: #4a7355;
+  --danger: #b5654f;
+  --border-hairline: rgba(196, 168, 107, 0.35);
+
+  font-family: "Cinzel", "Georgia", serif;
+  color: var(--parchment);
 }
 
-.quest-form {
+.creation-page {
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  padding: 1.75rem;
-  background: var(--parchment);
-  border: 1px solid var(--parchment-dark);
-  border-radius: 6px;
-  box-shadow: 0 1px 0 var(--parchment-dark) inset;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(196, 168, 107, 0.07) 1px, transparent 0),
+    radial-gradient(ellipse 700px 550px at 20% 10%, rgba(122, 74, 42, 0.22), transparent 60%),
+    radial-gradient(ellipse 600px 500px at 90% 90%, rgba(74, 115, 85, 0.16), transparent 55%),
+    linear-gradient(180deg, #171c2b 0%, var(--ink) 55%, var(--ink-deep) 100%);
+  background-size: 26px 26px, cover, cover, cover;
 }
 
-.quest-form__header h2 {
-  margin: 0 0 0.25rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-
-.quest-form__header p {
-  margin: 0;
-  font-size: 0.92rem;
-  color: rgba(43, 33, 24, 0.7);
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.field-row {
-  display: flex;
-  gap: 1rem;
-}
-
-.field-row .field {
-  flex: 1;
-}
-
-label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--forest-dark);
-}
-
-input[type='text'],
-input[type='number'],
-select,
-textarea {
-  font: inherit;
-  font-size: 0.95rem;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid var(--parchment-dark);
+.grimoire-form {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  padding: 2.5rem 2.25rem;
+  background-color: var(--ink);
+  border: 1px solid var(--border-hairline);
   border-radius: 3px;
-  background: #fbf6e6;
-  color: var(--ink);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    inset 0 0 80px rgba(196, 168, 107, 0.04);
+}
+
+.frame-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--brass);
+  opacity: 0.7;
+}
+.corner-tl { top: 9px; left: 9px; border-right: none; border-bottom: none; }
+.corner-tr { top: 9px; right: 9px; border-left: none; border-bottom: none; }
+.corner-bl { bottom: 9px; left: 9px; border-right: none; border-top: none; }
+.corner-br { bottom: 9px; right: 9px; border-left: none; border-top: none; }
+
+.form-title {
+  margin: 0 0 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--brass-bright);
+  text-shadow: 0 0 14px rgba(232, 207, 143, 0.25);
+  text-align: center;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  color: var(--brass);
+  margin-bottom: 0.35rem;
+  margin-top: 1rem;
+}
+
+.field-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-hairline);
+  border-radius: 2px;
+  color: var(--parchment);
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.field-input:focus {
   outline: none;
-  transition: border-color 0.12s ease;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 2px rgba(196, 168, 107, 0.15);
 }
 
-input[type='text']:focus,
-input[type='number']:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--gold);
-}
-
-textarea {
+.field-textarea {
+  min-height: 90px;
   resize: vertical;
-  font-family: inherit;
 }
 
-.field__error {
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--error);
-}
-
-.field__hint {
-  margin: 0;
-  font-size: 0.8rem;
-  color: rgba(43, 33, 24, 0.6);
-}
-
-.field--toggle {
-  padding: 0.75rem 0.85rem;
-  background: rgba(47, 64, 48, 0.08);
-  border-radius: 4px;
-}
-
-.toggle {
+.field-checkbox {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--ink);
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+  color: var(--parchment-dim);
   cursor: pointer;
 }
 
-.toggle input {
-  width: 1.05rem;
-  height: 1.05rem;
-  accent-color: var(--forest);
-  cursor: pointer;
+.assignment-section {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-hairline);
 }
 
-.quest-form__footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.25rem;
-}
-
-button[type='submit'] {
-  font: inherit;
-  font-size: 0.95rem;
+.section-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  padding: 0.6rem 1.5rem;
-  border: none;
-  border-radius: 3px;
-  background: var(--forest);
-  color: var(--parchment);
-  cursor: pointer;
-  transition: background-color 0.12s ease;
+  color: var(--brass);
 }
 
-button[type='submit']:hover {
-  background: var(--forest-dark);
+.section-hint {
+  margin: 0 0 1rem;
+  font-family: Georgia, serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--parchment-dim);
+  line-height: 1.5;
+}
+
+.selection-count {
+  margin: 0.6rem 0 0;
+  font-family: Georgia, serif;
+  font-size: 0.8rem;
+  color: var(--ember-green);
+}
+
+.form-error {
+  margin: 1.25rem 0 0;
+  padding: 0.6rem 0.75rem;
+  font-family: Georgia, serif;
+  font-size: 0.85rem;
+  color: #e8b3a0;
+  background: rgba(181, 101, 79, 0.12);
+  border: 1px solid rgba(181, 101, 79, 0.35);
+  border-radius: 2px;
+}
+
+.arcane-button {
+  width: 100%;
+  margin-top: 1.75rem;
+  padding: 0.7rem 1rem;
+  background: linear-gradient(180deg, var(--brass-bright), var(--brass));
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  color: var(--ink-deep);
+  font-family: "Cinzel", "Georgia", serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.arcane-button:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.arcane-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .grimoire-form {
+    padding: 2rem 1.5rem;
+  }
 }

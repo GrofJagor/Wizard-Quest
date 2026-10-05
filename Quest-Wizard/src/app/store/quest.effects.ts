@@ -4,7 +4,8 @@ import { catchError, map, switchMap } from "rxjs/operators";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import * as QuestActions from "./quest.actions";
 import * as RelActions from "./quest-wizard.actions";
-import { QuestsService } from "../services/quest";
+import { QuestService } from "../services/quest";
+import { NotificationService } from "../notification.service";
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
@@ -13,7 +14,8 @@ function errorMessage(error: unknown): string {
 @Injectable()
 export class QuestsEffects {
   private actions$ = inject(Actions);
-  private questService = inject(QuestsService);
+  private questService = inject(QuestService);
+  private notificationService = inject(NotificationService)
  
   loadQuests$ = createEffect(() =>
     this.actions$.pipe(
@@ -21,7 +23,9 @@ export class QuestsEffects {
       switchMap(() =>
         this.questService.getAll().pipe(
           map((quests) => QuestActions.loadQuestsSuccess({ quests })),
-          catchError((error: unknown) => of(QuestActions.loadQuestsFailure({ error: errorMessage(error) })))
+          catchError((error: unknown) =>
+            of(QuestActions.loadQuestsFailure({ error: errorMessage(error) }))
+          )
         )
       )
     )
@@ -127,12 +131,58 @@ export class QuestsEffects {
  
   joinQuest$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(RelActions.joinQuest),
+      ofType(QuestActions.joinQuest),
       switchMap(({ questId, wizardId }) =>
         this.questService.join(questId, wizardId).pipe(
-          map((quest) => RelActions.joinQuestSuccess({ quest, wizardId })),
+          map((quest) => QuestActions.joinQuestSuccess({ quest, wizardId })),
+          catchError((error: any) => {
+            if (error?.status === 400) {
+              const customMessage = error.error?.message || "You cannot join another quest until you complete your current quest.";
+              this.notificationService.showNotification(customMessage);
+            }
+            return of(QuestActions.joinQuestFailure({ error: errorMessage(error) }));
+          })
+        )
+      )
+    )
+  );
+ 
+  leaveQuest$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(QuestActions.leaveQuest),
+      switchMap(({ questId, wizardId }) =>
+        this.questService.leave(questId).pipe(
+          map((quest) => QuestActions.leaveQuestSuccess({ quest, wizardId })),
           catchError((error: unknown) =>
-            of(RelActions.joinQuestFailure({ error: errorMessage(error) }))
+            of(QuestActions.leaveQuestFailure({ error: errorMessage(error) }))
+          )
+        )
+      )
+    )
+  );
+ 
+  startQuest$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(QuestActions.startQuest),
+      switchMap(({ questId }) =>
+        this.questService.start(questId).pipe(
+          map((quest) => QuestActions.startQuestSuccess({ quest })),
+          catchError((error: unknown) =>
+            of(QuestActions.startQuestFailure({ error: errorMessage(error) }))
+          )
+        )
+      )
+    )
+  );
+ 
+  concludeQuest$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(QuestActions.concludeQuest),
+      switchMap(({ questId }) =>
+        this.questService.conclude(questId).pipe(
+          map((quest) => QuestActions.concludeQuestSuccess({ quest })),
+          catchError((error: unknown) =>
+            of(QuestActions.concludeQuestFailure({ error: errorMessage(error) }))
           )
         )
       )

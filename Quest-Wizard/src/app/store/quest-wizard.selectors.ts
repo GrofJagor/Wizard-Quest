@@ -11,7 +11,6 @@ export interface WizardView extends Omit<Wizard, "completedQuestIds" | "activeQu
   activeQuest: Quest | null;
 }
  
-/** Joins a single wizard with its full completed-quest and active-quest objects. */
 export const selectWizardView = (wizardId: string) =>
   createSelector(
     selectWizardById(wizardId),
@@ -30,7 +29,6 @@ export const selectWizardView = (wizardId: string) =>
     }
   );
  
-/** Joins every wizard with its full quest objects — use sparingly, prefer selectWizardView for one profile page. */
 export const selectAllWizardViews = createSelector(
   selectWizardsEntities,
   selectQuestsEntities,
@@ -48,7 +46,5 @@ export const selectAllWizardViews = createSelector(
         };
       })
 );
- 
-// Re-exported so existing imports of `selectQuestById` from this file don't
-// break — but for new code, import it directly from quest.selectors instead.
+
 export { selectQuestById };

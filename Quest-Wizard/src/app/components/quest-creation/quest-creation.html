@@ -1,84 +1,55 @@
+<div class="creation-page">
+  <form class="grimoire-form" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="frame-corner corner-tl"></div>
+    <div class="frame-corner corner-tr"></div>
+    <div class="frame-corner corner-bl"></div>
+    <div class="frame-corner corner-br"></div>
 
-<form class="quest-form" [formGroup]="form" (ngSubmit)="submit()">
-  <header class="quest-form__header">
-    <h2>Post a new quest</h2>
-    <p>Set the details, then decide who's allowed to answer the call.</p>
-  </header>
+    <h1 class="form-title">Post a New Quest</h1>
 
-  <div class="field">
-    <label for="title">Title</label>
-    <input
-      id="title"
-      type="text"
-      formControlName="title"
-      placeholder="e.g. The Lost Amulet"
-    />
-    <p class="field__error" *ngIf="form.get('title')?.touched && form.get('title')?.invalid">
-      Give the quest a title of at least 3 characters.
-    </p>
-  </div>
+    <label class="field-label">Title</label>
+    <input class="field-input" formControlName="title" />
 
-  <div class="field-row">
-    <div class="field">
-      <label for="level">Level</label>
-      <select id="level" formControlName="level">
-        <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
-      </select>
-    </div>
+    <label class="field-label">Difficulty</label>
+    <select class="field-input" formControlName="level">
+      <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
+    </select>
 
-    <div class="field">
-      <label for="reward">Reward (gold)</label>
-      <input id="reward" type="number" min="0" formControlName="reward" />
-      <p class="field__error" *ngIf="form.get('reward')?.touched && form.get('reward')?.invalid">
-        Reward can't be negative.
+    <label class="field-label">Patron</label>
+    <input class="field-input" formControlName="patron" />
+
+    <label class="field-label">Description</label>
+    <textarea class="field-input field-textarea" formControlName="description"></textarea>
+
+    <label class="field-label">Reward</label>
+    <input class="field-input" type="number" min="0" formControlName="reward" />
+
+    <label class="field-checkbox">
+      <input type="checkbox" formControlName="open" />
+      Open for any wizard to join
+    </label>
+
+    <div class="assignment-section" *ngIf="!isOpen">
+      <h2 class="section-title">Assign Wizards Directly</h2>
+      <p class="section-hint">
+        This quest will start <strong>in progress</strong> immediately with the wizards you
+        select below — no open/join phase. Only wizards not already committed to another
+        in-progress quest are shown.
+      </p>
+      <app-wizard-list
+        [wizards]="availableWizards"
+        [selectable]="true"
+        (selectionChange)="onWizardSelectionChange($event)"
+      ></app-wizard-list>
+      <p class="selection-count" *ngIf="selectedWizardIds.length > 0">
+        {{ selectedWizardIds.length }} wizard(s) selected
       </p>
     </div>
-  </div>
 
-  <div class="field">
-    <label for="description">Description</label>
-    <textarea
-      id="description"
-      rows="4"
-      formControlName="description"
-      placeholder="Where the quest takes place, what's at stake, and what success looks like."
-    ></textarea>
-    <p
-      class="field__error"
-      *ngIf="form.get('description')?.touched && form.get('description')?.invalid"
-    >
-      Add a bit more detail (10 characters minimum).
-    </p>
-  </div>
+    <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-  <div class="field field--toggle">
-    <label class="toggle">
-      <input
-        type="checkbox"
-        formControlName="openToAll"
-        (change)="onOpenToAllChange()"
-      />
-      <span>Open to every wizard</span>
-    </label>
-    <p class="field__hint">
-      Leave this checked and any wizard can pick up the quest. Uncheck it to invite specific
-      wizards instead.
-    </p>
-  </div>
-
-  <div class="field" *ngIf="!openToAll">
-    <label>Invite wizards</label>
-    <app-wizard-list
-      [wizards]="(wizards | async) ?? []"
-      [selected]="selectedWizardIds"
-      (selectedChange)="onWizardSelectionChange($event)"
-    ></app-wizard-list>
-    <p class="field__error" *ngIf="needsWizardSelection">
-      Choose at least one wizard, or switch the quest back to open to everyone.
-    </p>
-  </div>
-
-  <footer class="quest-form__footer">
-    <button type="submit">Post quest</button>
-  </footer>
-</form>
+    <button type="submit" class="arcane-button" [disabled]="loading">
+      {{ loading ? "Posting..." : "Post Quest" }}
+    </button>
+  </form>
+</div>

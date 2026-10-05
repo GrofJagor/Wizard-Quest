@@ -6,6 +6,7 @@ import { UpdateWizardProfileDto } from '../../dto/update.wizard.profile.dto.js';
 import { CurrentUser } from '../../decorators/current.user.decorator.js';
 import { RolesGuard } from '../../auth/auth/guards/roles.guard.js';
 import { Roles } from '../../decorators/roles.decorator.js';
+import { idsMatch } from '../../util/id.util.js';
 
 interface RequestUser {
   userId: string;
@@ -17,33 +18,38 @@ interface RequestUser {
 export class WizardsController {
   constructor(private readonly wizardsService: WizardsService) {}
  
-
  
   @Get("without-active-quest")
   getWithoutActiveQuest() {
     return this.wizardsService.findWizardsWithNoActiveQuest();
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.TOWER)
+  @Get("available-for-assignment")
+  getAvailableForAssignment() {
+    return this.wizardsService.findAvailableForAssignment();
+  }
  
 
- 
   @Get()
   findAll() {
     return this.wizardsService.findAll();
   }
  
   @Get(":id")
-  findOne(@Param("id", ParseUUIDPipe) id: string) {
+  findOne(@Param("id") id: string) {
     return this.wizardsService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch(":id")
   updateProfile(
-    @Param("id", ParseUUIDPipe) id: string,
+    @Param("id") id: string,
     @Body() dto: UpdateWizardProfileDto,
     @CurrentUser() user: RequestUser
   ) {
-    if (user.role !== UserRole.TOWER && user.userId !== id) {
+    if (user.role !== UserRole.TOWER && !idsMatch(user.userId, id)) {
       throw new ForbiddenException("You can only edit your own profile.");
     }
     return this.wizardsService.updateProfile(id, dto);
@@ -52,7 +58,7 @@ export class WizardsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.TOWER)
   @Delete(":id")
-  remove(@Param("id", ParseUUIDPipe) id: string) {
+  remove(@Param("id") id: string) {
     return this.wizardsService.remove(id);
   }
 }

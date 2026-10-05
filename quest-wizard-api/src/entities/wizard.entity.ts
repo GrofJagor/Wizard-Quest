@@ -14,14 +14,14 @@ export class Wizard extends User {
   affinity: string;
  
   @Column({ type: "int", default: 1 })
-  xp: number; // 1-100
+  xp: number;
  
   @Column({ type: "nvarchar", length: 500, nullable: true })
   pictureUrl: string;
  
   @Column({type: "bit", default: 0})
   isOnActiveQuest: boolean;
-  // Relacije (ManyToMany i ManyToOne) ne prave problem, ostaju iste
+
   @ManyToMany(() => Quest, (quest) => quest.completedByWizards)
   @JoinTable({ name: "wizard_completed_quests" })
   completedQuests: Quest[];

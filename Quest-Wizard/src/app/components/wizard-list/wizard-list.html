@@ -1,48 +1,47 @@
-<div class="picker">
-  <div class="picker__search">
-    <input
-      type="text"
-      [(ngModel)]="searchTerm"
-      placeholder="Search by name or specialty"
-      aria-label="Search wizards"
-    />
-    <span class="picker__count">{{ selected.length }} chosen</span>
-  </div>
-
-  <ul class="picker__list" *ngIf="filteredWizards.length; else empty">
-    <li
-      *ngFor="let wizard of filteredWizards; trackBy: trackByWizardId"
-      class="wizard-row"
-      [class.wizard-row--chosen]="isSelected(wizard.id)"
-      (click)="toggle(wizard.id)"
-    >
-      <input
-        type="checkbox"
-        [checked]="isSelected(wizard.id)"
-        (click)="$event.stopPropagation(); toggle(wizard.id)"
-        [attr.aria-label]="'Invite ' + wizard.name"
-      />
-      <img class="wizard-row__badge" src="{{wizard.pictureUrl}}" >
-      <!-- <span class="wizard-row__badge">{{ wizard.name.charAt(0) }}</span> -->
-      <span class="wizard-row__info">
-        <span class="wizard-row__name">{{ wizard.name }}  lvl: {{wizard.level}}</span>
-        <span class="wizard-row__specialty">{{ wizard.affinity }}</span>
-      </span>
-    </li>
-  </ul>
-
-  <ng-template #empty>
-    <p class="picker__empty">No wizards match "{{ searchTerm }}".</p>
-  </ng-template>
+<div class="wizard-search-container">
+  <input 
+    type="text" 
+    class="wizard-search-input" 
+    placeholder="Search wizards by name or affinity..." 
+    (input)="onSearchChange($event)"
+  />
 </div>
 
+<div class="wizard-list-wrap">
+  <ng-container *ngIf="displayWizards$ | async as wizards">
+    <ul class="wizard-list" *ngIf="wizards.length > 0; else noWizards">
+      <li
+        *ngFor="let wizard of wizards"
+        class="wizard-item"
+        [class.selected]="isSelected(wizard.id)"
+        [class.clickable]="selectable"
+        (click)="toggle(wizard.id)"
+      >
+        <input
+          *ngIf="selectable"
+          type="checkbox"
+          class="wizard-checkbox"
+          [checked]="isSelected(wizard.id)"
+          (click)="$event.stopPropagation()"
+          (change)="toggle(wizard.id)"
+        />
 
+        <span class="wizard-avatar" *ngIf="wizard.pictureUrl">
+          <img [src]="wizard.pictureUrl" [alt]="wizard.name" />
+        </span>
+        <span class="wizard-avatar wizard-avatar-fallback" *ngIf="!wizard.pictureUrl">
+          {{ initial(wizard.name) }}
+        </span>
 
+        <span class="wizard-info">
+          <span class="wizard-name">{{ wizard.name }}</span>
+          <span class="wizard-meta">Level {{ wizard.level }} · {{ wizard.affinity }}</span>
+        </span>
+      </li>
+    </ul>
 
-
-
-
-
-
-
-
+    <ng-template #noWizards>
+      <p class="empty-note">No wizards available.</p>
+    </ng-template>
+  </ng-container>
+</div>
